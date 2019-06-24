@@ -6,7 +6,7 @@ export default class extends Language {
 		super(client, store, file, dir);
 		this.language = {
 			// Add Language keys in here with Portuguese translations
-			TEST: "This is a test but in portuguese"
+			TEST: 'This is a test but in portuguese'
 		};
 	}
 

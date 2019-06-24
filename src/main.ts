@@ -1,22 +1,21 @@
 import { KlasaClient } from 'klasa';
-import { NeroClientOptions } from './lib/structures/neroClient.schema'
-import permissionLevels from './lib/structures/PermissionLevels'
+import { NeroClientOptions } from './lib/structures/neroClient.schema';
+import permissionLevels from './lib/structures/PermissionLevels';
 import { config, token } from '../config';
 
 class NeroClient extends KlasaClient {
 
-	public owners: Array<string>;
+	public owners: string[];
 
-	constructor(options: NeroClientOptions) {
-		// @ts-ignore
+	public constructor(options: NeroClientOptions) {
 		super({
 			...options,
 			permissionLevels
 		});
 
-		this.owners = options.ownerIDs
+		this.owners = options.ownerIDs;
 		// Add any properties to your Klasa Client
-	}*/
+	}
 
 	// Add any methods to your Klasa Client
 

@@ -16,7 +16,7 @@ class NeroClient extends KlasaClient {
 
 		this.owners = options.ownerIDs
 		// Add any properties to your Klasa Client
-	}
+	}*/
 
 	// Add any methods to your Klasa Client
 

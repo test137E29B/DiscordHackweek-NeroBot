@@ -21,7 +21,7 @@ export default class extends Command {
 
 		const days: number = '7d' in flags ? 7 : '1d' in flags ? 1 : 0;
 
-		await user.ban({ days, reason: `${msg.author.tag}${reason ? ` || ${reason}` : ``}` })
+		return user.ban({ days, reason: `${msg.author.tag}${reason ? ` || ${reason}` : ``}` })
 			.then(() => msg.sendLocale('COMMAND_BAN_DONE', [user, reason, days]))
 			.catch(() => msg.sendLocale('ERR'));
 	}

@@ -12,7 +12,8 @@
     "test:lint": "eslint --ext ts src",
     "build": "tsc -p .",
     "watch": "tsc -p . -w",
-    "start": "node dist/src/main.js"
+    "start": "node dist/src/main.js",
+    "dev": "rm -rf dist && yarn run build && yarn run start"
   },
   "dependencies": {
     "discord.js": "discordjs/discord.js",

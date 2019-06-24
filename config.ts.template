@@ -27,7 +27,7 @@ export const config: NeroClientOptions = {
 	// A presence to login with
 	presence: {},
 	// List of owners (just their IDs)
-	ownerIDs: [''],
+	ownerIDs: ['176093529053855744', '178750706981928961'],
 	// A once ready message for your console
 	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 
@@ -44,7 +44,7 @@ export const config: NeroClientOptions = {
 	/**
 	 * Sharding Options
 	 */
-	shardCount: 0,
+	// shardCount: 0,
 
 	/**
 	 * Command Handler Options
@@ -129,7 +129,7 @@ export const config: NeroClientOptions = {
 		providers: {
 			enabled: true
 		},
-		tasks: { enabled: true }
+		// tasks: { enabled: true }
 	},
 
 	/**

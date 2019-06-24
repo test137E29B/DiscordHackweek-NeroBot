@@ -6,7 +6,19 @@ export default class extends Language {
 		super(client, store, file, dir);
 		this.language = {
 			// Add Language keys in here with Portuguese translations
-			TEST: 'This is a test but in portuguese'
+			TEST: 'Isto é um teste',
+			ERR: '\\❌ **|** Aconteceu um erro, por favor tente novamente mais tarde\nSe o erro persistir, contate o suporte',
+
+			// Kick
+			COMMAND_KICK_DESCRIPTION: 'Expulsa um usuário',
+			COMMAND_KICK_NOT: (user) => `\\❌ **|** Infelizmente, não posso expulsar \`${user.user.tag}\``,
+			COMMAND_KICK_DONE: (user, reason) => `\\👢 **|** \`${user.user.tag}\` levou uma botada ${reason ? ` por \`${reason}\`` : ``}`,
+
+			// BAN
+			COMMAND_BAN_DESCRIPTION: 'Bane um usuário',
+			COMMAND_BAN_NOT: (user) => `\\❌ **|** Infelizmente, não posso banir \`${user.user.tag}\``,
+			COMMAND_BAN_DONE: (user, reason, days) => `\\🔨 **|** \`${user.user.tag}\` levou uma martelada${reason ? ` por \`${reason}\`` : ``}${days ? ` e suas mensagens ${days === 7 ? 'dos últimos 7 days' : 'das últimas 24 hours'} foram removidas` : ``}`
+
 		};
 	}
 

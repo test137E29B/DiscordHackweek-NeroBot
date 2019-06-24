@@ -1,4 +1,4 @@
-import { KlasaClientOptions } from 'klasa';
+import { NeroClientOptions } from './src/lib/structures/neroClient.schema';
 
 /**
  * The following are all client options for Klasa/Discord.js.
@@ -6,7 +6,7 @@ import { KlasaClientOptions } from 'klasa';
  * This file is init with defaults from both Klasa and Discord.js.
  */
 
-export const config: KlasaClientOptions = {
+export const config: NeroClientOptions = {
 	/**
 	 * General Options
 	 */
@@ -26,6 +26,8 @@ export const config: KlasaClientOptions = {
 	disabledEvents: [],
 	// A presence to login with
 	presence: {},
+	// List of owners (just their IDs)
+	ownerIDs: [''],
 	// A once ready message for your console
 	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 

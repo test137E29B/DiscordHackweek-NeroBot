@@ -14,7 +14,8 @@ export default new PermissionLevels()
       const settings = guild.settings as NeroGuildSchema;
 
       return member.roles.some(
-        (role: Role): boolean => role.id === settings.roles.warn.id
+        (role: Role): boolean =>
+          settings.roles.warn && role.id === settings.roles.warn.id
       );
     },
     {
@@ -31,7 +32,8 @@ export default new PermissionLevels()
 
       return (
         member.roles.some(
-          (role: Role): boolean => role.id === settings.roles.kick.id
+          (role: Role): boolean =>
+            settings.roles.kick && role.id === settings.roles.kick.id
         ) || member.permissions.has("KICK_MEMBERS")
       );
     },
@@ -49,7 +51,8 @@ export default new PermissionLevels()
 
       return (
         member.roles.some(
-          (role: Role): boolean => role.id === settings.roles.ban.id
+          (role: Role): boolean =>
+            settings.roles.ban && role.id === settings.roles.ban.id
         ) || member.permissions.has("BAN_MEMBERS")
       );
     },
@@ -67,7 +70,8 @@ export default new PermissionLevels()
 
       return (
         member.roles.some(
-          (role: Role): boolean => role.id === settings.roles.manager.id
+          (role: Role): boolean =>
+            settings.roles.manager && role.id === settings.roles.manager.id
         ) || member.permissions.has("MANAGE_GUILD")
       );
     },
@@ -85,7 +89,8 @@ export default new PermissionLevels()
 
       return (
         member.roles.some(
-          (role: Role): boolean => role.id === settings.roles.admin.id
+          (role: Role): boolean =>
+            settings.roles.admin && role.id === settings.roles.admin.id
         ) || member.permissions.has("ADMINISTRATOR")
       );
     },
@@ -119,7 +124,9 @@ export default new PermissionLevels()
   )
 
   // Bot Owner (Silent)
-  .add(10, ({ author, client }: KlasaMessage): boolean =>
-    // @ts-ignore
-    client.owners.some((id: string): boolean => author.id === id)
+  .add(
+    10,
+    ({ author, client }: KlasaMessage): boolean =>
+      // @ts-ignore
+      client.owners.some((id: string): boolean => author.id === id)
   );

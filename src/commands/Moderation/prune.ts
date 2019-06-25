@@ -14,7 +14,7 @@ export default class extends Command {
       extendedHelp: lang => lang.get("COMMAND_PRUNE_EXTENDED"),
       runIn: ["text"],
       aliases: ["purge", "clean"],
-      usage: "<Amount:number{1,50}> (Channel:channel)"
+      usage: "<Amount:number{1,50}> [Channel:channel]"
     });
 
     this.customizeResponse("Amount", msg =>

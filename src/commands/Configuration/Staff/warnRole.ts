@@ -19,7 +19,7 @@ export default class extends Command {
   }
 
   public async set(msg: KlasaMessage, args: [Role]) {
-    if (!(await msg.hasAtLeastPermissionLevel(6)))
+    if (!(await msg.hasAtLeastPermissionLevel(5)))
       return msg.sendLocale("ROLES_NO_PERM", ["warn"]);
 
     const [role] = args;

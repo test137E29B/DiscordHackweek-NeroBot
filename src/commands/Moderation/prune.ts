@@ -1,4 +1,5 @@
 import { Command, CommandStore, KlasaMessage, KlasaClient } from "klasa";
+import { TextChannel } from "discord.js";
 
 export default class extends Command {
   public constructor(
@@ -22,7 +23,10 @@ export default class extends Command {
     );
   }
 
-  public async run(msg: KlasaMessage, args): Promise<any> {
+  public async run(
+    msg: KlasaMessage,
+    args: [number, TextChannel?]
+  ): Promise<any> {
     const [amount, channel] = args;
 
     let target;

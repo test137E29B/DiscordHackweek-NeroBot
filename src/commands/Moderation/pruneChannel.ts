@@ -18,7 +18,7 @@ export default class extends Command {
     });
   }
 
-  public async run(msg: KlasaMessage, args: [TextChannel]): Promise<any> {
+  public async run(msg: KlasaMessage, args: [TextChannel?]): Promise<any> {
     const [channel] = args;
     let oldCh: TextChannel;
 

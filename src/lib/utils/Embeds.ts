@@ -49,6 +49,7 @@ class BaseEmbed {
 
     // Color
     if (this.options.color) embed.setColor(this.options.color);
+    else embed.setColor(this.color);
 
     // Description
     if (this.options.description)

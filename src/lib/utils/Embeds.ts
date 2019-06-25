@@ -7,13 +7,14 @@ import {
 } from "discord.js";
 
 export interface IEmbedOptions {
-  fields?: EmbedField[];
   author?: {
     name: string;
     url?: string;
     iconURL?: string;
   };
+  color?: ColorResolvable;
   description?: string;
+  fields?: EmbedField[];
   files?: (MessageAttachment | string | FileOptions)[];
   footer?: { text?: string; iconURL?: string; proxyIconURL?: string };
   image?: string;
@@ -45,6 +46,9 @@ class BaseEmbed {
         this.options.author.iconURL,
         this.options.author.url
       );
+
+    // Color
+    if (this.options.color) embed.setColor(this.options.color);
 
     // Description
     if (this.options.description)

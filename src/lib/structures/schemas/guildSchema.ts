@@ -1,36 +1,121 @@
-import { KlasaClient } from 'klasa';
+import { KlasaClient, SchemaFolder, Settings } from "klasa";
+import { TextChannel, Role } from "discord.js";
 const { defaultGuildSchema } = KlasaClient;
 
-export default defaultGuildSchema
-	.add('automod', folder => folder
-		.add('enabled', 'boolean', { default: false })
+enum NeroModActionType {
+  BAN,
+  SOFTBAN,
+  TEMPBAN,
+  KICK,
+  DELETE,
+  WARN
+}
 
-		.add('perspective', subfolder => subfolder
-			.add('enabled', 'boolean', { default: false })
-			.add('channels', 'textchannel', { array: true })
-			.add('toxicity', 'any', { array: true }))
+interface NeroModAction {
+  action: NeroModActionType;
+  args: string[];
+  reason?: string;
+}
 
-		.add('words', subfolder => subfolder
-			.add('enabled', 'boolean', { default: false })
-			.add('channels', 'textchannel', { array: true })
-			.add('list', 'string', { array: true })
-			.add('action', 'any', { default: { action: 'kick', reason: 'Saying a blacklisted word' } }))
+interface PerspectiveToxicity {
+  threshold: number;
+  action: NeroModAction;
+  reason?: string;
+  days?: string;
+}
 
-		.add('invite', subfolder => subfolder
-			.add('enabled', 'boolean', { default: false })
-			.add('channels', 'textchannel', { array: true })
-			.add('action', 'any', { default: { action: 'kick', reason: 'Sending invites' } }))
+export interface NeroGuildSchema extends Settings {
+  automod: {
+    enabled: boolean;
+    perspective: {
+      enabled: boolean;
+      channels: TextChannel[];
+      toxicity: PerspectiveToxicity[];
+    };
+    words: {
+      enabled: boolean;
+      channels: TextChannel[];
+      list: string[];
+      action: NeroModAction;
+    };
+    invite: {
+      enabled: boolean;
+      channels: TextChannel[];
+      action: NeroModAction;
+    };
+    repetition: {
+      enabled: boolean;
+      channels: TextChannel[];
+      action: NeroModAction;
+    };
+  };
+  roles: {
+    warn: Role;
+    kick: Role;
+    ban: Role;
+    manager: Role;
+    admin: Role;
+  };
+}
 
-		.add('repetition', subfolder => subfolder
-			.add('enabled', 'boolean', { default: false })
-			.add('channels', 'textchannel', { array: true })
-			.add('action', 'any', { default: { action: 'kick', reason: 'Don\'t repeat messages!' } }))
-	)
+export const schema = defaultGuildSchema
+  .add(
+    "automod",
+    (folder): SchemaFolder =>
+      folder
+        .add("enabled", "boolean", { default: false })
 
-	.add('roles', folder => folder
-		.add('warn', 'role')
-		.add('kick', 'role')
-		.add('ban', 'role')
-		.add('manager', 'role')
-		.add('admin', 'role')
-	);
+        .add(
+          "perspective",
+          (subfolder): SchemaFolder =>
+            subfolder
+              .add("enabled", "boolean", { default: false })
+              .add("channels", "textchannel", { array: true })
+              .add("toxicity", "any", { array: true })
+        )
+
+        .add(
+          "words",
+          (subfolder): SchemaFolder =>
+            subfolder
+              .add("enabled", "boolean", { default: false })
+              .add("channels", "textchannel", { array: true })
+              .add("list", "string", { array: true })
+              .add("action", "any", {
+                default: { action: "kick", reason: "Saying a blacklisted word" }
+              })
+        )
+
+        .add(
+          "invite",
+          (subfolder): SchemaFolder =>
+            subfolder
+              .add("enabled", "boolean", { default: false })
+              .add("channels", "textchannel", { array: true })
+              .add("action", "any", {
+                default: { action: "kick", reason: "Sending invites" }
+              })
+        )
+
+        .add(
+          "repetition",
+          (subfolder): SchemaFolder =>
+            subfolder
+              .add("enabled", "boolean", { default: false })
+              .add("channels", "textchannel", { array: true })
+              .add("action", "any", {
+                default: { action: "kick", reason: "Don't repeat messages!" }
+              })
+        )
+  )
+
+  .add(
+    "roles",
+    (folder): SchemaFolder =>
+      folder
+        .add("warn", "role")
+        .add("kick", "role")
+        .add("ban", "role")
+        .add("manager", "role")
+        .add("admin", "role")
+  );

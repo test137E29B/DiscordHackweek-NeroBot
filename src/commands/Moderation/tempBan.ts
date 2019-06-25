@@ -1,4 +1,5 @@
 import { Command, CommandStore, KlasaMessage, KlasaClient } from "klasa";
+import { GuildMember } from "discord.js";
 
 export default class extends Command {
   constructor(
@@ -17,10 +18,11 @@ export default class extends Command {
     });
   }
 
-  async run(msg: KlasaMessage, args) {
+  async run(msg: KlasaMessage, args: [GuildMember, any, String]) {
     const { flags } = msg;
     const [user, duration, reason] = args;
-
+    if (user.user.id === this.client.user.id)
+      return msg.send(this.client.languages.get("en-US").get("COMPUTER_MAN"));
     if (!user.bannable) return msg.sendLocale("COMMAND_TEMPBAN_NOT", [user]);
 
     const days: number = "7d" in flags ? 7 : "1d" in flags ? 1 : 0;

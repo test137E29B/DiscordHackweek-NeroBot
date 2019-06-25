@@ -10,7 +10,7 @@ export default class extends Language {
     super(client, store, file, dir);
     this.language = {
       // Add Language keys in here
-      TEST: "This is a test",
+      COMPUTER_MAN: "https://www.youtube.com/watch?v=jeg_TJvkSjg", // Computer Man Easter Egg
       ERR:
         "\\❌ **|** An error occurred, please try again later\nIf the issue persists, contact support",
 
@@ -45,9 +45,7 @@ export default class extends Language {
       COMMAND_SOFTBAN_EXTENDED:
         "Flags: --7d\nIf no flags are specified the messages from the last 24 hours will be deleted instead",
       COMMAND_SOFTBAN_NOT: user =>
-        `\\❌ **|** Unfortunately, I'm not able to softban \`${
-          user.user.tag
-        }\``,
+        `\\❌ **|** Unfortunately, I'm not able to softban \`${user.user.tag}\``,
       COMMAND_SOFTBAN_DONE: (user, reason, days) =>
         `\\🔨 **|** \`${
           user.user.tag
@@ -62,9 +60,7 @@ export default class extends Language {
       COMMAND_TEMPBAN_EXTENDED:
         "Flags: --7d --1d\nThe unban can be cancelled at anytime by using the cancelUnban command",
       COMMAND_TEMPBAN_NOT: user =>
-        `\\❌ **|** Unfortunately, I'm not able to softban \`${
-          user.user.tag
-        }\``,
+        `\\❌ **|** Unfortunately, I'm not able to softban \`${user.user.tag}\``,
       COMMAND_TEMPBAN_DONE: (user, reason, days, duration) =>
         `\\🔨 **|** \`${
           user.user.tag

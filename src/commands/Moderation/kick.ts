@@ -1,4 +1,5 @@
 import { Command, CommandStore, KlasaMessage, KlasaClient } from "klasa";
+import { GuildMember } from "discord.js";
 
 export default class extends Command {
   public constructor(
@@ -18,8 +19,10 @@ export default class extends Command {
     });
   }
 
-  public async run(msg: KlasaMessage, args) {
+  public async run(msg: KlasaMessage, args: [GuildMember, String]) {
     const [user, reason] = args;
+    if (user.user.id === this.client.user.id)
+      return msg.send(this.client.languages.get("en-US").get("COMPUTER_MAN"));
     if (!user.kickable) return msg.sendLocale("COMMAND_KICK_NOT", [user]);
 
     return user

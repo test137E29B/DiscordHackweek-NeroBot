@@ -28,7 +28,7 @@ export default class extends Command {
     return user
       .ban({
         days,
-        reason: `${msg.author.tag}${reason ? ` || ${reason}` : ``}`
+        reason: `${msg.author.tag} - BAN${reason ? ` || ${reason}` : ``}`
       })
       .then(() => msg.sendLocale("COMMAND_BAN_DONE", [user, reason, days]))
       .catch(() => msg.sendLocale("ERR"));

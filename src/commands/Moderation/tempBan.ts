@@ -38,7 +38,7 @@ export default class extends Command {
               guildId: msg.guild.id,
               mod: msg.author.tag,
               reason: reason,
-              type: `TEMPBAN (${msg.args[1]})`
+              type: `UNBAN`
             },
             catchUp: true,
             id: `${user.id}-${msg.guild.id}`

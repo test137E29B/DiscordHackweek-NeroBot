@@ -17,6 +17,12 @@ export default class extends Task {
 
     if (!guild) return;
 
+    const stillBanned = await guild
+      .fetchBans()
+      .then(bans => bans.some(ban => ban.user.id === userId));
+
+    if (!stillBanned) return;
+
     guild.members
       .unban(userId, `${mod} - ${type}${reason ? ` || ${reason}` : ``}`)
       .then(user =>

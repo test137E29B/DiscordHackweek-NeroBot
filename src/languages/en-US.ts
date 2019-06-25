@@ -89,7 +89,6 @@ export default class extends Language {
         }`
     };
   }
-
   public async init(): Promise<void> {
     await super.init();
   }

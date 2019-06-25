@@ -1,7 +1,7 @@
 import { Command, CommandStore, KlasaMessage, KlasaClient } from "klasa";
 
 export default class extends Command {
-  constructor(
+  public constructor(
     client: KlasaClient,
     store: CommandStore,
     file: string[],
@@ -17,7 +17,7 @@ export default class extends Command {
     });
   }
 
-  async run(msg: KlasaMessage, args) {
+  public async run(msg: KlasaMessage, args): Promise<any> {
     const { flags } = msg;
     const [user, reason] = args;
 

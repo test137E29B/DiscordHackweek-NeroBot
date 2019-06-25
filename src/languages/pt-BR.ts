@@ -110,7 +110,26 @@ export default class extends Language {
       COMMAND_PRUNECHANNEL_NOT: channel =>
         `\\❌ **|** Infelizmente, não posso limpar ${channel}`,
       COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
-        `\\🧨 **|** \`#${oldCh.name}\` foi completamente limpo ||${user}||`
+        `\\🧨 **|** \`#${oldCh.name}\` foi completamente limpo ||${user}||`,
+
+      // ROLES
+      RESOLVER_IMPROVEDROLE_INVALID:
+        "Você deve inserir um ID, menção ou nome de um cargo",
+
+      ROLES_DESCRIPTION: roleType =>
+        `Mostra o cargo com permissão de ${roleType} ou configura um novo`,
+      ROLES_NO_PERM: roleType =>
+        `\\❌ **|** Desculpe, você não tem permissão de trocar o cargo de ${roleType}`,
+      ROLES_DONE: (roleType, role) =>
+        `\\🎭 **|** O novo cargo de ${roleType} agora é \`${role.name} (${
+          role.id
+        })\``,
+      ROLES_VIEW: (roleType, role) =>
+        `\\🎭 **|** O cargo de ${roleType} atual é \`${role.name} (${
+          role.id
+        })\``,
+      ROLES_NOT_DEFINED: roleType =>
+        `\\❌ **|** Nenhum cargo de ${roleType} foi configurado`
     };
   }
 

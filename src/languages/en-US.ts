@@ -45,7 +45,9 @@ export default class extends Language {
       COMMAND_SOFTBAN_EXTENDED:
         "Flags: --7d\nIf no flags are specified the messages from the last 24 hours will be deleted instead",
       COMMAND_SOFTBAN_NOT: user =>
-        `\\❌ **|** Unfortunately, I'm not able to softban \`${user.user.tag}\``,
+        `\\❌ **|** Unfortunately, I'm not able to softban \`${
+          user.user.tag
+        }\``,
       COMMAND_SOFTBAN_DONE: (user, reason, days) =>
         `\\🔨 **|** \`${
           user.user.tag
@@ -60,7 +62,9 @@ export default class extends Language {
       COMMAND_TEMPBAN_EXTENDED:
         "Flags: --7d --1d\nThe unban can be cancelled at anytime by using the cancelUnban command",
       COMMAND_TEMPBAN_NOT: user =>
-        `\\❌ **|** Unfortunately, I'm not able to softban \`${user.user.tag}\``,
+        `\\❌ **|** Unfortunately, I'm not able to softban \`${
+          user.user.tag
+        }\``,
       COMMAND_TEMPBAN_DONE: (user, reason, days, duration) =>
         `\\🔨 **|** \`${
           user.user.tag
@@ -111,7 +115,26 @@ export default class extends Language {
       COMMAND_PRUNECHANNEL_NOT: channel =>
         `\\❌ **|** Unfortunately, I'm not able to prune ${channel}`,
       COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
-        `\\🧨 **|** \`#${oldCh.name}\` has been pruned ||${user}||`
+        `\\🧨 **|** \`#${oldCh.name}\` has been pruned ||${user}||`,
+
+      // ROLES
+      RESOLVER_IMPROVEDROLE_INVALID:
+        "You must insert a valid role ID, mention or name",
+
+      ROLES_DESCRIPTION: roleType =>
+        `Displays the current ${roleType} role or sets it to a new one`,
+      ROLES_NO_PERM: roleType =>
+        `\\❌ **|** Sorry, you don't have permission to set the ${roleType} role`,
+      ROLES_DONE: (roleType, role) =>
+        `\\🎭 **|** The new ${roleType} role has been set to \`${role.name} (${
+          role.id
+        })\``,
+      ROLES_VIEW: (roleType, role) =>
+        `\\🎭 **|** The current ${roleType} role is \`${role.name} (${
+          role.id
+        })\``,
+      ROLES_NOT_DEFINED: roleType =>
+        `\\❌ **|** No ${roleType} role has been setup`
     };
   }
   public async init(): Promise<void> {

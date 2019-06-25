@@ -1,5 +1,5 @@
-import { KlasaClientOptions } from 'klasa';
+import { KlasaClientOptions } from "klasa";
 
-export interface NeroClientOptions extends Omit<KlasaClientOptions, 'ownerID'> {
-	ownerIDs: string[];
+export interface NeroClientOptions extends Omit<KlasaClientOptions, "ownerID"> {
+  ownerIDs: string[];
 }

@@ -92,7 +92,26 @@ export default class extends Language {
       COMMAND_UNBAN_DONE: (user, reason) =>
         `\\✨ **|** \`${user.tag}\` has been unbanned${
           reason ? ` for \`${reason}\`` : ``
-        }`
+        }`,
+
+      // PRUNE
+      COMMAND_PRUNE_DESCRIPTION:
+        "Deletes messages from a channel (up to 50 messages)",
+      COMMAND_PRUNE_EXTENDED:
+        "If the desired result is deleting all the messages from a channel, consider using pruneChannel instead",
+      COMMAND_PRUNE_INVALID:
+        "You must insert a valid amount of messages to delete (up to 50), if you want to clear the channel instead use the pruneChannel command",
+      COMMAND_PRUNE_DONE: (messages, desired, channel) =>
+        `\\🧨 **|** \`${messages.size}${
+          messages.size !== desired ? `/${desired}` : ``
+        }\` message${messages.size === 1 ? " has" : "s have"} been deleted`,
+
+      // PRUNECHANNEL
+      COMMAND_PRUNECHANNEL_DESCRIPTION: "Prunes all messages from a channel",
+      COMMAND_PRUNECHANNEL_NOT: channel =>
+        `\\❌ **|** Unfortunately, I'm not able to prune ${channel}`,
+      COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
+        `\\🧨 **|** \`#${oldCh.name}\` has been pruned ||${user}||`
     };
   }
   public async init(): Promise<void> {

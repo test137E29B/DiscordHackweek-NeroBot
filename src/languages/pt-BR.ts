@@ -89,7 +89,28 @@ export default class extends Language {
       COMMAND_UNBAN_DONE: (user, reason) =>
         `\\✨ **|** \`${user.tag}\` foi desbanido${
           reason ? ` por \`${reason}\`` : ``
-        }`
+        }`,
+
+      // PRUNE
+      COMMAND_PRUNE_DESCRIPTION:
+        "Deleta uma certa quantidade de mensagens de um canal (up to 50 messages)",
+      COMMAND_PRUNE_EXTENDED:
+        "Se a quantidade desejada de mensagens a serem deletadas for muito grande, considere usando pruneChannel",
+      COMMAND_PRUNE_INVALID:
+        "Você deve inserir uma quantidade válida de mensagens a serem deletadas (até 50), se desejar limpar mais do que isso considere usar pruneChannel",
+      COMMAND_PRUNE_DONE: (messages, desired, channel) =>
+        `\\🧨 **|** \`${messages.size}${
+          messages.size !== desired ? `/${desired}` : ``
+        }\` mensage${
+          messages.size === 1 ? "m foi deletada" : "ns foram deletadas"
+        }`,
+
+      // PRUNECHANNEL
+      COMMAND_PRUNECHANNEL_DESCRIPTION: "Deleta todas as mensagens de um canal",
+      COMMAND_PRUNECHANNEL_NOT: channel =>
+        `\\❌ **|** Infelizmente, não posso limpar ${channel}`,
+      COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
+        `\\🧨 **|** \`#${oldCh.name}\` foi completamente limpo ||${user}||`
     };
   }
 

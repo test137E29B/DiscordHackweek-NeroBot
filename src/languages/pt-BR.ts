@@ -79,6 +79,16 @@ export default class extends Language {
       COMMAND_CANCELUNBAN_DONE: (user, reason) =>
         `\\🆑 **|** O desbanimento de \`${user.tag}\` foi cancelado${
           reason ? ` por \`${reason}\`` : ``
+        }`,
+
+      // UNBAN
+      RESOLVER_BANNEDUSER_INVALID:
+        "Você deve inserir um ID ou menção válidos de um usuário banido",
+
+      COMMAND_UNBAN_DESCRIPTION: "Desbane um usuário",
+      COMMAND_UNBAN_DONE: (user, reason) =>
+        `\\✨ **|** \`${user.tag}\` foi desbanido${
+          reason ? ` por \`${reason}\`` : ``
         }`
     };
   }

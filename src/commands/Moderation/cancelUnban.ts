@@ -41,8 +41,6 @@ export default class extends Command {
       .then(bans => bans.find(ban => ban.user.id === schedule.split("-")[0]))
       .then(ban => (ban ? ban.user : { tag: "Not Found" }));
 
-    this.client.console.log(user);
-
     return this.client.schedule
       .delete(schedule)
       .then(() => {

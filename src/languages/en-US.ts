@@ -86,6 +86,16 @@ export default class extends Language {
       COMMAND_CANCELUNBAN_DONE: (user, reason) =>
         `\\🆑 **|** \`${user.tag}\`'s scheduled unban has been canceled${
           reason ? ` for \`${reason}\`` : ``
+        }`,
+
+      // UNBAN
+      RESOLVER_BANNEDUSER_INVALID:
+        "You must insert a valid banned user's id or their mention",
+
+      COMMAND_UNBAN_DESCRIPTION: "Unbans a user",
+      COMMAND_UNBAN_DONE: (user, reason) =>
+        `\\✨ **|** \`${user.tag}\` has been unbanned${
+          reason ? ` for \`${reason}\`` : ``
         }`
     };
   }

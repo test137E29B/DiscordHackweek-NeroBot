@@ -34,13 +34,15 @@ export default class extends Command {
         }`
       })
       .then(() =>
-        msg.guild.members
-          .unban(
-            user.id,
-            `SOFTBAN (${days}d) || ${msg.author.tag}${
-              reason ? ` || ${reason}` : ``
-            }`
-          )
+        this.client.tasks
+          .get("unban")
+          .run({
+            userId: user.id,
+            guildId: msg.guild.id,
+            mod: msg.author.tag,
+            reason,
+            type: "UNBAN"
+          })
           .then(() =>
             msg.sendLocale("COMMAND_SOFTBAN_DONE", [user, reason, days])
           )

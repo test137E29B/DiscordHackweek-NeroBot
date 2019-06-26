@@ -50,11 +50,16 @@ export interface NeroGuildSchema extends Settings {
     };
   };
   roles: {
-    warn: Role;
-    kick: Role;
-    ban: Role;
-    manager: Role;
-    admin: Role;
+    staff: {
+      warn: Role;
+      kick: Role;
+      ban: Role;
+      manager: Role;
+      admin: Role;
+    };
+    punishments: {
+      mute: Role;
+    };
   };
 }
 
@@ -113,9 +118,18 @@ export const schema = defaultGuildSchema
     "roles",
     (folder): SchemaFolder =>
       folder
-        .add("warn", "role")
-        .add("kick", "role")
-        .add("ban", "role")
-        .add("manager", "role")
-        .add("admin", "role")
+        .add(
+          "staff",
+          (subfolder): SchemaFolder =>
+            subfolder
+              .add("warn", "role")
+              .add("kick", "role")
+              .add("ban", "role")
+              .add("manager", "role")
+              .add("admin", "role")
+        )
+        .add(
+          "punishments",
+          (subfolder): SchemaFolder => subfolder.add("muted", "role")
+        )
   );

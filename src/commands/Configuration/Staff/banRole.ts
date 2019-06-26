@@ -14,7 +14,7 @@ export default class extends Command {
       aliases: ["banR", "setupban", "bansetup", "banperm"],
       runIn: ["text"],
       subcommands: true,
-      usage: "<set|show> (Role:improvedrole)"
+      usage: "<set|show|reset> (Role:improvedrole)"
     });
   }
 
@@ -24,20 +24,34 @@ export default class extends Command {
 
     const [role] = args;
     return msg.guild.settings
-      .update("roles.ban", role.id, msg.guild)
+      .update("roles.staff.ban", role.id, msg.guild)
       .then(result => {
         if (result.errors && result.errors.length) return msg.sendLocale("ERR");
         return msg.sendLocale("ROLES_DONE", ["ban", role]);
-      });
+      })
+      .catch(() => msg.sendLocale("ERR"));
   }
 
   public async show(msg: KlasaMessage) {
     // @ts-ignore
-    const roleId = msg.guild.settings.roles.ban;
+    const roleId = msg.guild.settings.roles.staff.ban;
     if (!roleId) return msg.sendLocale("ROLES_NOT_DEFINED", ["ban"]);
 
     const role = msg.guild.roles.get(roleId);
 
     return msg.sendLocale("ROLES_VIEW", ["ban", role]);
+  }
+
+  public async reset(msg: KlasaMessage) {
+    if (!(await msg.hasAtLeastPermissionLevel(5)))
+      return msg.sendLocale("ROLES_NO_PERM", ["ban"]);
+
+    return msg.guild.settings
+      .reset("roles.staff.ban")
+      .then(result => {
+        if (result.errors && result.errors.length) return msg.sendLocale("ERR");
+        return msg.sendLocale("ROLES_RESET", ["ban"]);
+      })
+      .catch(() => msg.sendLocale("ERR"));
   }
 }

@@ -14,7 +14,7 @@ export default class extends Command {
       aliases: ["kickR", "setupkick", "kicksetup", "kickperm"],
       runIn: ["text"],
       subcommands: true,
-      usage: "<set|show> (Role:improvedrole)"
+      usage: "<set|show|reset> (Role:improvedrole)"
     });
   }
 
@@ -24,20 +24,34 @@ export default class extends Command {
 
     const [role] = args;
     return msg.guild.settings
-      .update("roles.kick", role.id, msg.guild)
+      .update("roles.staff.kick", role.id, msg.guild)
       .then(result => {
         if (result.errors && result.errors.length) return msg.sendLocale("ERR");
         return msg.sendLocale("ROLES_DONE", ["kick", role]);
-      });
+      })
+      .catch(() => msg.sendLocale("ERR"));
   }
 
   public async show(msg: KlasaMessage) {
     // @ts-ignore
-    const roleId = msg.guild.settings.roles.kick;
+    const roleId = msg.guild.settings.roles.staff.kick;
     if (!roleId) return msg.sendLocale("ROLES_NOT_DEFINED", ["kick"]);
 
     const role = msg.guild.roles.get(roleId);
 
     return msg.sendLocale("ROLES_VIEW", ["kick", role]);
+  }
+
+  public async reset(msg: KlasaMessage) {
+    if (!(await msg.hasAtLeastPermissionLevel(5)))
+      return msg.sendLocale("ROLES_NO_PERM", ["kick"]);
+
+    return msg.guild.settings
+      .reset("roles.staff.kick")
+      .then(result => {
+        if (result.errors && result.errors.length) return msg.sendLocale("ERR");
+        return msg.sendLocale("ROLES_RESET", ["kick"]);
+      })
+      .catch(() => msg.sendLocale("ERR"));
   }
 }

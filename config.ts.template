@@ -19,7 +19,7 @@ export const config: NeroClientOptions = {
 	// If custom settings should be preserved when a guild removes your bot
 	preserveSettings: true,
 	// If your bot should be able to mention @everyone
-	disableEveryone: false,
+	disableEveryone: true,
 	// The time in ms to add to ratelimits, to ensure you wont hit a 429 response
 	restTimeOffset: 500,
 	// Any Websocket Events you don't want to listen to
@@ -68,7 +68,10 @@ export const config: NeroClientOptions = {
 			options: {}
 		},
 		*/
-		default: 'json'
+		mongodb: {
+      connectionString: "aaaaaaa"
+    },
+    default: "mongodb"
 	},
 
 	/**
@@ -88,7 +91,7 @@ export const config: NeroClientOptions = {
 			aliases: [],
 			autoAliases: true,
 			bucket: 1,
-			cooldown: 0,
+			cooldown: 1,
 			description: '',
 			enabled: true,
 			guarded: false,
@@ -101,6 +104,7 @@ export const config: NeroClientOptions = {
 			runIn: ['text', 'dm'],
 			subcommands: false,
 			usage: '',
+      usageDelim: " ",
 			quotedStringSupport: false,
 			deletable: false
 		},

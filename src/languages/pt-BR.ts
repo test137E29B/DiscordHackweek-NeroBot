@@ -119,17 +119,18 @@ export default class extends Language {
       ROLES_DESCRIPTION: roleType =>
         `Mostra o cargo com permissão de ${roleType} ou configura um novo`,
       ROLES_NO_PERM: roleType =>
-        `\\❌ **|** Desculpe, você não tem permissão de trocar o cargo de ${roleType}`,
+        `\\❌ **|** Desculpe, você não tem permissão de alterar o cargo de ${roleType}`,
       ROLES_DONE: (roleType, role) =>
-        `\\🎭 **|** O novo cargo de ${roleType} agora é \`${role.name} (${
-          role.id
-        })\``,
+        `\\🎭 **|** O novo cargo de ${roleType} agora é \`${role.name} (${role.id})\``,
+      ROLES_RESET: roleType => `\\🎭 **|** O cargo de ${roleType} foi resetado`,
       ROLES_VIEW: (roleType, role) =>
-        `\\🎭 **|** O cargo de ${roleType} atual é \`${role.name} (${
-          role.id
-        })\``,
+        `\\🎭 **|** O cargo de ${roleType} atual é \`${role.name} (${role.id})\``,
       ROLES_NOT_DEFINED: roleType =>
-        `\\❌ **|** Nenhum cargo de ${roleType} foi configurado`
+        `\\❌ **|** Nenhum cargo de ${roleType} foi configurado`,
+
+      // MUTEDROLE
+      COMMAND_MUTEDROLE_EXTENDED:
+        "Opções: --manual (não cria as permissões automaticamente)"
     };
   }
 

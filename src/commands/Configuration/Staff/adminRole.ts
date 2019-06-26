@@ -14,7 +14,7 @@ export default class extends Command {
       aliases: ["admin", "adminr", "setupadmin", "adminsetup", "adminperm"],
       runIn: ["text"],
       subcommands: true,
-      usage: "<set|show> (Role:improvedrole)"
+      usage: "<set|show|reset> (Role:improvedrole)"
     });
   }
 
@@ -24,20 +24,34 @@ export default class extends Command {
 
     const [role] = args;
     return msg.guild.settings
-      .update("roles.admin", role.id, msg.guild)
+      .update("roles.staff.admin", role.id, msg.guild)
       .then(result => {
         if (result.errors && result.errors.length) return msg.sendLocale("ERR");
         return msg.sendLocale("ROLES_DONE", ["admin", role]);
-      });
+      })
+      .catch(() => msg.sendLocale("ERR"));
   }
 
   public async show(msg: KlasaMessage) {
     // @ts-ignore
-    const roleId = msg.guild.settings.roles.admin;
+    const roleId = msg.guild.settings.roles.staff.admin;
     if (!roleId) return msg.sendLocale("ROLES_NOT_DEFINED", ["admin"]);
 
     const role = msg.guild.roles.get(roleId);
 
     return msg.sendLocale("ROLES_VIEW", ["admin", role]);
+  }
+
+  public async reset(msg: KlasaMessage) {
+    if (!(await msg.hasAtLeastPermissionLevel(7)))
+      return msg.sendLocale("ROLES_NO_PERM", ["admin"]);
+
+    return msg.guild.settings
+      .reset("roles.staff.admin")
+      .then(result => {
+        if (result.errors && result.errors.length) return msg.sendLocale("ERR");
+        return msg.sendLocale("ROLES_RESET", ["admin"]);
+      })
+      .catch(() => msg.sendLocale("ERR"));
   }
 }

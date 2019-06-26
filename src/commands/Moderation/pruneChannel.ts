@@ -14,7 +14,9 @@ export default class extends Command {
       description: lang => lang.get("COMMAND_PRUNECHANNEL_DESCRIPTION"),
       runIn: ["text"],
       aliases: ["prunec", "purgechannel", "purgec", "cleanchannel", "cleanc"],
-      usage: "[Channel:channel]"
+      usage: "[Channel:channel]",
+      cooldownLevel: "guild",
+      cooldown: 2
     });
   }
 

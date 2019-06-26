@@ -20,8 +20,10 @@
     "fix-deps": "yarn add discordjs/discord.js dirigeants/klasa"
   },
   "dependencies": {
+    "@kcp/functions": "^1.0.0",
     "discord.js": "discordjs/discord.js",
     "klasa": "dirigeants/klasa",
+    "klasa-dashboard-hooks": "dirigeants/klasa-dashboard-hooks",
     "mongodb": "^3.2.7"
   },
   "devDependencies": {

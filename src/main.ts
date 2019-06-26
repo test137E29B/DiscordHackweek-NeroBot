@@ -6,6 +6,10 @@ import { schema } from "./lib/structures/schemas/guildSchema";
 
 import { config, token } from "../config";
 
+// Plugins
+import { Client as DashboardClient } from "klasa-dashboard-hooks";
+import { Client as FunctionsClient } from "@kcp/functions";
+
 class NeroClient extends KlasaClient {
   public owners: string[];
 
@@ -20,5 +24,8 @@ class NeroClient extends KlasaClient {
     this.owners = options.ownerIDs;
   }
 }
+
+NeroClient.use(DashboardClient);
+NeroClient.use(FunctionsClient);
 
 new NeroClient(config).login(token);

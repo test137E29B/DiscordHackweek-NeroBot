@@ -84,6 +84,15 @@ export const config: NeroClientOptions = {
 	},
 
 	/**
+	 * Klasa Functions
+	 */
+	aliasFunctions: {
+		prefix: 'funcs',
+		enabled: true,
+		returnMethod: 'run'
+	},
+
+	/**
 	 * Klasa Piece Defaults
 	 */
 	pieceDefaults: {

@@ -8,7 +8,7 @@ export default new PermissionLevels()
 
   // Warn Permission
   .add(
-    2,
+    1,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
       const settings = guild.settings as NeroGuildSchema;
@@ -16,6 +16,23 @@ export default new PermissionLevels()
       return member.roles.some(
         (role: Role): boolean =>
           settings.roles.staff.warn && role.id === settings.roles.staff.warn.id
+      );
+    },
+    {
+      fetch: true
+    }
+  )
+
+  // Mute Permission
+  .add(
+    2,
+    ({ guild, member }: KlasaMessage): boolean => {
+      if (!guild) return false;
+      const settings = guild.settings as NeroGuildSchema;
+
+      return member.roles.some(
+        (role: Role): boolean =>
+          settings.roles.staff.mute && role.id === settings.roles.staff.mute.id
       );
     },
     {

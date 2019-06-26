@@ -51,6 +51,7 @@ export interface NeroGuildSchema extends Settings {
   };
   roles: {
     staff: {
+      mute: Role;
       warn: Role;
       kick: Role;
       ban: Role;
@@ -122,6 +123,7 @@ export const schema = defaultGuildSchema
           "staff",
           (subfolder): SchemaFolder =>
             subfolder
+              .add("mute", "role")
               .add("warn", "role")
               .add("kick", "role")
               .add("ban", "role")

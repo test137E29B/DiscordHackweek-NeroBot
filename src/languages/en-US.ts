@@ -25,11 +25,12 @@ export default class extends Language {
 
       // BAN
       COMMAND_BAN_DESCRIPTION: "Bans a user",
-      COMMAND_BAN_EXTENDED: "Flags: --7d --1d",
+      COMMAND_BAN_EXTENDED:
+        "Flags: --7d --1d (deletes their messages) --silent (doesn't log)",
       COMMAND_BAN_NOT: user =>
         `\\❌ **|** Unfortunately, I'm not able to ban \`${user.user.tag}\``,
-      COMMAND_BAN_DONE: (user, reason, days) =>
-        `\\🔨 **|** \`${user.user.tag}\` was hit with the ban hammer${
+      COMMAND_BAN_DONE: (userOrId, reason, days) =>
+        `\\🔨 **|** \`${userOrId}\` was hit with the ban hammer${
           reason ? ` for \`${reason}\`` : ``
         }${
           days
@@ -61,10 +62,8 @@ export default class extends Language {
         "Flags: --7d --1d\nThe unban can be cancelled at anytime by using the cancelUnban command",
       COMMAND_TEMPBAN_NOT: user =>
         `\\❌ **|** Unfortunately, I'm not able to softban \`${user.user.tag}\``,
-      COMMAND_TEMPBAN_DONE: (user, reason, days, duration) =>
-        `\\🔨 **|** \`${
-          user.user.tag
-        }\` was hit with the ban hammer (temporarily)${
+      COMMAND_TEMPBAN_DONE: (userOrId, reason, days, duration) =>
+        `\\🔨 **|** \`${userOrId}\` was hit with the ban hammer (temporarily)${
           reason ? ` for \`${reason}\`` : ``
         }${
           days
@@ -128,6 +127,9 @@ export default class extends Language {
         `\\🎭 **|** The current ${roleType} role is \`${role.name} (${role.id})\``,
       ROLES_NOT_DEFINED: roleType =>
         `\\❌ **|** No ${roleType} role has been setup`,
+      ROLES_REQUIRED: (roleType, setupCommand) =>
+        `\\❌ **|** The ${roleType} role must be setup in order to use this command, to set it up run ${setupCommand ||
+          roleType}`,
 
       // MUTEDROLE
       COMMAND_MUTEDROLE_EXTENDED:

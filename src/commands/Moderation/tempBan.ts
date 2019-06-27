@@ -14,45 +14,40 @@ export default class extends Command {
       description: lang => lang.get("COMMAND_TEMPBAN_DESCRIPTION"),
       runIn: ["text"],
       aliases: ["temp", "tempb"],
-      usage: "<User:member> <Duration:duration> [Reason:...string]"
+      usage:
+        "<User:member|ID:regex/^(\\d{17,19})$/> <Duration:duration> [Reason:...string]"
     });
   }
 
   async run(msg: KlasaMessage, args: [GuildMember, any, String]) {
     const { flags } = msg;
     const [user, duration, reason] = args;
-    if (user.user.id === this.client.user.id)
+
+    if ((user instanceof GuildMember ? user.id : user) === this.client.user.id)
       return msg.send(this.client.languages.get("en-US").get("COMPUTER_MAN"));
     if (!user.bannable) return msg.sendLocale("COMMAND_TEMPBAN_NOT", [user]);
 
     const days: number = "7d" in flags ? 7 : "1d" in flags ? 1 : 0;
-    const reasonText: string = `${msg.author.tag} - TEMPBAN (${msg.args[1]}) ${
-      reason ? ` || ${reason}` : ``
-    }`;
+    const silent: boolean = "silent" in flags || "s" in flags;
 
-    return user
-      .ban({ days, reason: reasonText })
+    // @ts-ignore
+    return this.client.funcs
+      .tempBan({
+        user,
+        guild: msg.guild,
+        mod: msg.author,
+        reason,
+        duration,
+        delMsgs: days,
+        silent
+      })
       .then(() =>
-        this.client.schedule
-          .create("unban", duration, {
-            data: {
-              userId: user.id,
-              guildId: msg.guild.id,
-              mod: msg.author.tag,
-              reason: reason,
-              type: `UNBAN`
-            },
-            catchUp: true,
-            id: `${user.id}-${msg.guild.id}`
-          })
-          .then(() =>
-            msg.sendLocale("COMMAND_TEMPBAN_DONE", [
-              user,
-              reason,
-              days,
-              msg.args[1]
-            ])
-          )
+        msg.sendLocale("COMMAND_TEMPBAN_DONE", [
+          user instanceof GuildMember ? user.user.tag : user,
+          reason,
+          days,
+          msg.args[1]
+        ])
       )
       .catch(() => msg.sendLocale("ERR"));
   }

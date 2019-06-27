@@ -24,6 +24,7 @@
     "discord.js": "discordjs/discord.js",
     "klasa": "dirigeants/klasa",
     "klasa-dashboard-hooks": "dirigeants/klasa-dashboard-hooks",
+    "klasa-member-gateway": "dirigeants/klasa-member-gateway",
     "mongodb": "^3.2.7"
   },
   "devDependencies": {

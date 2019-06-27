@@ -12,23 +12,37 @@ export default class extends Task {
     });
   }
 
-  async run({ userId, guildId, mod, reason, type }) {
+  async run({
+    userId,
+    guildId,
+    modId,
+    reason,
+    silent
+  }: {
+    userId: string;
+    guildId: string;
+    modId?: string;
+    reason?: string;
+    silent: boolean;
+  }) {
     const guild = this.client.guilds.get(guildId);
 
     if (!guild) return;
 
-    const stillBanned = await guild
-      .fetchBans()
-      .then(bans => bans.some(ban => ban.user.id === userId));
+    const bans = await guild.fetchBans();
+    const ban = bans.find(ban => ban.user.id === userId);
 
-    if (!stillBanned) return;
+    if (!ban) return;
+    const mod = this.client.users.get(modId);
 
-    guild.members
-      .unban(userId, `${mod} - ${type}${reason ? ` || ${reason}` : ``}`)
-      .then(user =>
-        this.client.emit("modlog", { user, guild, mod, reason, type })
-      )
-      .catch(() => {});
+    // @ts-ignore
+    this.client.funcs.unban({
+      user: userId,
+      guild,
+      mod,
+      reason,
+      silent
+    });
     // The code that will receive the metadata from the task
   }
 }

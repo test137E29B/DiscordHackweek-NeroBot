@@ -28,12 +28,15 @@ export default class extends Command {
     msg: KlasaMessage,
     args: [number, TextChannel?]
   ): Promise<any> {
+    const { flags } = msg;
     const [amount, channel] = args;
 
     let target;
 
     if (!channel) target = msg.channel;
     else target = channel;
+
+    const silent: boolean = "silent" in flags || "s" in flags;
 
     return target
       .bulkDelete(
@@ -42,9 +45,17 @@ export default class extends Command {
           before: msg.id
         })
       )
-      .then(messages =>
-        msg.sendLocale("COMMAND_PRUNE_DONE", [messages, amount, target])
-      )
+      .then(async messages => {
+        await this.client.emit("modlog", {
+          channel: target,
+          guild: msg.guild,
+          mod: msg.author,
+          silent,
+          type: "PRUNE"
+        });
+
+        return msg.sendLocale("COMMAND_PRUNE_DONE", [messages, amount, target]);
+      })
       .catch(() => msg.sendLocale("ERR"));
   }
 }

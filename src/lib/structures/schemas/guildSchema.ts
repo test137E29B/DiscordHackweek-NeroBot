@@ -2,26 +2,43 @@ import { KlasaClient, SchemaFolder, Settings } from "klasa";
 import { TextChannel, Role } from "discord.js";
 const { defaultGuildSchema } = KlasaClient;
 
-enum NeroModActionType {
+enum NeroModDashboardActionType {
   BAN,
   SOFTBAN,
   TEMPBAN,
   KICK,
   DELETE,
-  WARN
+  WARN,
+  MUTE
+}
+
+export enum NeroModActionType {
+  BAN,
+  SOFTBAN,
+  TEMPBAN,
+  KICK,
+  DELETE,
+  WARN,
+  MUTE,
+  PRUNE,
+  PRUNECHANNEL
 }
 
 interface NeroModAction {
-  action: NeroModActionType;
-  args: string[];
+  action: NeroModDashboardActionType;
+  duration?: Date;
+  ignoreStaff: boolean;
   reason?: string;
+  feedback?: {
+    enabled: boolean;
+    text: string;
+  };
+  delMsgs?: 7 | 1 | 0;
+  silent: boolean;
 }
 
-interface PerspectiveToxicity {
+interface PerspectiveToxicity extends NeroModAction {
   threshold: number;
-  action: NeroModAction;
-  reason?: string;
-  days?: string;
 }
 
 export interface NeroGuildSchema extends Settings {
@@ -59,7 +76,7 @@ export interface NeroGuildSchema extends Settings {
       admin: Role;
     };
     punishments: {
-      mute: Role;
+      muted: Role;
     };
   };
 }

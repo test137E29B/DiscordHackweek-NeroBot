@@ -191,3 +191,4 @@ export const config: NeroClientOptions = {
 
 // The token for this bot to login with
 export const token: string = '';
+export const perspective: string = '';

@@ -39,10 +39,11 @@ export default class extends Function {
         delMsgs: action.delMsgs,
         silent: action.delMsgs
       })
-        .then(() =>
-          action.action !== 4 ? msg.deletable && msg.delete() : true
-        )
         .catch(() => false)
+        .finally(val => {
+          if (action.action !== 4 && msg.deletable) msg.delete();
+          return val;
+        })
     );
   }
 }

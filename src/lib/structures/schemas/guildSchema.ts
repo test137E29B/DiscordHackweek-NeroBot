@@ -37,7 +37,7 @@ export interface NeroModAction {
   silent: boolean;
 }
 
-interface PerspectiveToxicity extends NeroModAction {
+export interface PerspectiveToxicity extends NeroModAction {
   threshold: number;
 }
 

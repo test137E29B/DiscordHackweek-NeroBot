@@ -7,8 +7,10 @@ import {
 } from "klasa";
 import {
   NeroGuildSchema,
-  NeroModAction
+  PerspectiveToxicity
 } from "../lib/structures/schemas/guildSchema";
+import fetch from "node-fetch";
+import { perspective } from "../../config";
 
 export default class extends Monitor {
   constructor(
@@ -31,30 +33,48 @@ export default class extends Monitor {
     const config: Settings & NeroGuildSchema = guild.settings;
     const automod = config.get("automod");
 
-    if (!automod.enabled || !automod.words.enabled) return;
+    if (!automod.enabled || !automod.perspective.enabled || !!command) return;
 
     const {
-      list,
       channels,
-      action
+      toxicity
     }: {
-      list: string[];
       channels: string[];
-      action: NeroModAction;
-    } = config.get("automod.words");
+      toxicity: PerspectiveToxicity[];
+    } = config.get("automod.perspective");
 
-    if (
-      !channels.includes(channel.id) ||
-      !action ||
-      !list ||
-      !list.length ||
-      !!command
-    )
-      return;
+    if (!channels.includes(channel.id) || !toxicity || !toxicity.length) return;
 
-    if (
-      list.find(word => cleanContent.toUpperCase().includes(word.toUpperCase()))
+    const analisys = await fetch(
+      `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${perspective}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          comment: {
+            text: cleanContent
+          },
+          requestedAttributes: {
+            TOXICITY: {}
+          },
+          doNotStore: true
+        })
+      }
     )
+      .then(res => res.json())
+      .catch(e => e.error || e);
+
+    if (!analisys || analisys.error) return;
+
+    const toxLevel = analisys.attributeScores.TOXICITY.summaryScore.value;
+    this.client.console.log(toxLevel);
+    const action = toxicity
+      .sort((a, b) => a.threshold - b.threshold)
+      .filter(act => act.threshold <= toxLevel)
+      .pop();
+
+    if (!action) return;
+
+    if (analisys)
       // @ts-ignore
       return this.client.funcs
         .punish({

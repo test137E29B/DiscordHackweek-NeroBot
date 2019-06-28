@@ -31,29 +31,22 @@ export default class extends Monitor {
     const config: Settings & NeroGuildSchema = guild.settings;
     const automod = config.get("automod");
 
-    if (!automod.enabled || !automod.words.enabled) return;
+    if (!automod.enabled || !automod.invite.enabled) return;
 
     const {
-      list,
       channels,
       action
     }: {
-      list: string[];
       channels: string[];
       action: NeroModAction;
-    } = config.get("automod.words");
+    } = config.get("automod.invite");
+
+    if (!channels.includes(channel.id) || !action || !!command) return;
 
     if (
-      !channels.includes(channel.id) ||
-      !action ||
-      !list ||
-      !list.length ||
-      !!command
-    )
-      return;
-
-    if (
-      list.find(word => cleanContent.toUpperCase().includes(word.toUpperCase()))
+      /(http(s?):\/\/(www\.)?)?(discord\.(gg|me|io)|discordapp\.com\/invite)\/.+/g.test(
+        cleanContent
+      )
     )
       // @ts-ignore
       return this.client.funcs

@@ -66,7 +66,7 @@ export default class extends Monitor {
     if (!analisys || analisys.error) return;
 
     const toxLevel = analisys.attributeScores.TOXICITY.summaryScore.value;
-    this.client.console.log(toxLevel);
+
     const action = toxicity
       .sort((a, b) => a.threshold - b.threshold)
       .filter(act => act.threshold <= toxLevel)

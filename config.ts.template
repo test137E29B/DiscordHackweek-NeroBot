@@ -87,7 +87,7 @@ export const config: NeroClientOptions = {
 	 * Klasa Functions
 	 */
 	aliasFunctions: {
-		prefix: 'functions',
+		prefix: 'funcs',
 		enabled: true,
 		returnMethod: 'run'
 	},

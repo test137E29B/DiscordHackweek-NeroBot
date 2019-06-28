@@ -15,30 +15,18 @@ export interface NeroWarn extends NeroPunishment {
 export interface NeroMemberSchema extends Settings {
   warns: {
     active: NeroWarn[];
-    inactive: NeroWarn[];
     archived: NeroWarn[];
   };
-  punishments: {
-    active: NeroPunishment[];
-    inactive: NeroPunishment[];
-    archived: NeroPunishment[];
-  };
+  muted: boolean;
 }
 
-export const schema = new Schema()
+// @ts-ignore
+export const schema: NeroMemberSchema = new Schema()
   .add(
     "warns",
     (folder): SchemaFolder =>
       folder
         .add("active", "any", { array: true })
-        .add("inactive", "any", { array: true })
         .add("archived", "any", { array: true })
   )
-  .add(
-    "punishments",
-    (folder): SchemaFolder =>
-      folder
-        .add("active", "any", { array: true })
-        .add("inactive", "any", { array: true })
-        .add("archived", "any", { array: true })
-  );
+  .add("muted", "boolean");

@@ -22,34 +22,31 @@ export default class extends Command {
     msg: KlasaMessage,
     args: [GuildMember, Date, String]
   ): Promise<any> {
+    const { flags } = msg;
     const [user, duration, reason] = args;
 
     const { settings } = msg.guild;
+
     // @ts-ignore
     const { muted } = settings.roles.punishments;
 
     if (!muted)
       return msg.sendLocale("ROLES_REQUIRED", ["muted", "mutedSetup"]);
 
-    this.client.console.log(user, duration, reason, muted);
+    const silent: boolean = "silent" in flags || "s" in flags;
 
-    return user
-      .edit({
-        roles: [muted]
+    // @ts-ignore
+    return this.client.funcs
+      .mute({
+        user,
+        guild: msg.guild,
+        mod: msg.author,
+        role: muted,
+        duration,
+        reason,
+        silent
       })
-      .then(async () => {
-        if (duration)
-          await this.client.schedule.create("unmute", duration, {
-            data: {
-              userId: user.id,
-              guildId: msg.guild.id,
-              modId: msg.author.id,
-              reason
-            }
-          });
-
-        return msg.sendLocale("COMMAND_MUTE_DONE");
-      })
+      .then(() => msg.sendLocale("COMMAND_MUTE_DONE"))
       .catch(() => msg.sendLocale("ERR"));
   }
 }

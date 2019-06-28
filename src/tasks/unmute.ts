@@ -8,32 +8,41 @@ export default class extends Task {
     dir: string
   ) {
     super(client, store, file, dir, {
-      name: "unban"
+      name: "unmute"
     });
   }
 
-  async run({ userId, guildId, modId, reason }) {
-    /* const guild = this.client.guilds.get(guildId);
-
+  async run({ userId, guildId, modId, silent }) {
+    const guild = this.client.guilds.get(guildId);
     if (!guild) return;
 
-    const stillBanned = await guild
-      .fetchBans()
-      .then(bans => bans.some(ban => ban.user.id === userId));
+    // @ts-ignore
+    const role = guild.settings.roles.punishments.muted;
 
-    if (!stillBanned) return;
+    // @ts-ignore
+    const userSettings = await this.client.gateways.members.get(
+      `${guildId}.${userId}`
+    );
+    this.client.console.log(userSettings);
+    if (!role || !userSettings) {
+      await guild.settings.update("toUnmute", userId, { action: "add" });
+      return;
+    }
 
-    const mod = guild.members.get(modId) || { user: { tag: "Not Found" } };
+    // @ts-ignore
+    const stillMuted = userSettings.muted;
+    if (!stillMuted) return;
 
-    guild.members
-      .unban(
-        userId,
-        `${mod.user.tag} - ${type}${reason ? ` || ${reason}` : ``}`
-      )
-      .then(user =>
-        this.client.emit("modlog", { user, guild, mod, reason, type: "UNBAN" })
-      )
-      .catch(() => {});
-    // The code that will receive the metadata from the task */
+    const mod = this.client.users.get(modId);
+    const user = guild.members.get(userId);
+
+    // @ts-ignore
+    this.client.funcs.unmute({
+      user: user || userId,
+      guild,
+      mod,
+      role,
+      silent
+    });
   }
 }

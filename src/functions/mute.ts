@@ -10,15 +10,17 @@ export default class extends Function {
     role,
     duration,
     reason,
-    silent
+    silent,
+    keep
   }: {
     user: KlasaMember;
     guild: Guild;
     mod?: User;
-    role: Role;
+    role: Role | string;
     duration?: Date;
     reason?: string;
     silent: boolean;
+    keep: boolean;
   }) {
     return user
       .edit(
@@ -26,19 +28,31 @@ export default class extends Function {
         `${mod ? `${mod.tag} - ` : ``}MUTE${reason ? ` || ${reason}` : ``}`
       )
       .then(async () => {
-        // @ts-ignore
-        await this.client.funcs.clearTasks({ user, guild, taskName: "unmute" });
+        if (!keep)
+          // @ts-ignore
+          await this.client.funcs.clearTasks({
+            user,
+            guild,
+            taskName: "unmute"
+          });
 
-        if (duration)
+        if (duration && !keep)
           await this.client.schedule.create("unmute", duration, {
             data: {
               userId: user.id,
               guildId: guild.id,
-              modId: mod.id
-            }
+              modId: mod.id,
+              silent
+            },
+            catchUp: true
           });
 
-        await user.settings.update("muted", true);
+        // @ts-ignore
+        const sett = this.client.gateways.members.get(
+          `${guild.id}.${typeof user === "string" ? user : user.id}`,
+          true
+        );
+        if (sett) await sett.update("muted", true);
 
         return this.client.emit("modlog", {
           user,

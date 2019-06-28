@@ -1,5 +1,15 @@
-import { Command, CommandStore, KlasaMessage, KlasaClient } from "klasa";
+import {
+  Command,
+  CommandStore,
+  KlasaMessage,
+  KlasaClient,
+  constants
+} from "klasa";
 import { GuildMember } from "discord.js";
+import { KlasaMember } from "klasa-member-gateway";
+const {
+  MENTION_REGEX: { userOrMember }
+} = constants;
 
 export default class extends Command {
   public constructor(
@@ -11,10 +21,27 @@ export default class extends Command {
     super(client, store, file, dir, {
       requiredPermissions: ["MANAGE_ROLES", "EMBED_LINKS"],
       permissionLevel: 2,
-      description: lang => lang.get("COMMAND_MUTE_DESCRIPTION"),
+      description: lang => lang.get("COMMAND_UNMUTE_DESCRIPTION"),
       runIn: ["text"],
-      aliases: ["shush", "stfu", "m"],
-      usage: "<User:member> [Duration:duration] [Reason:...string]"
+      aliases: ["talk"],
+      usage: "<User:mutedmember> [Reason:...string]"
+    });
+
+    this.createCustomResolver("mutedmember", async (arg, possible, msg) => {
+      if (!arg || !userOrMember.test(arg))
+        throw msg.language.get("RESOLVER_MUTEDMEMBER_INVALID");
+
+      const id = arg.replace(/[!@<>]/g, "");
+      const member = msg.guild.members.get(id) as KlasaMember;
+
+      if (!member) throw msg.language.get("RESOLVER_MUTEDMEMBER_INVALID");
+
+      await member.settings.sync(true);
+      // @ts-ignore
+      if (!member.settings.muted)
+        throw msg.language.get("RESOLVER_MUTEDMEMBER_INVALID");
+
+      return member;
     });
   }
 
@@ -23,7 +50,7 @@ export default class extends Command {
     args: [GuildMember, Date, String]
   ): Promise<any> {
     const { flags } = msg;
-    const [user, duration, reason] = args;
+    const [user, reason] = args;
 
     if (!user.manageable) return msg.sendLocale("COMMAND_MUTE_NOT");
 
@@ -39,26 +66,15 @@ export default class extends Command {
 
     // @ts-ignore
     return this.client.funcs
-      .mute({
+      .unmute({
         user,
         guild: msg.guild,
         mod: msg.author,
         role: muted,
-        duration,
         reason,
         silent
       })
-      .then(() =>
-        msg.sendLocale("COMMAND_MUTE_DONE", [
-          user,
-          reason,
-          duration ? msg.args[1] : null
-        ])
-      )
-      .then(() =>
-        // @ts-ignore
-        this.client.console.log(user.settings.muted)
-      )
+      .then(() => msg.sendLocale("COMMAND_UNMUTE_DONE", [user]))
       .catch(() => msg.sendLocale("ERR"));
   }
 }

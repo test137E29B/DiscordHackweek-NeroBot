@@ -1,4 +1,4 @@
-import { Schema, SchemaFolder, Settings } from "klasa";
+import { Schema, SchemaFolder } from "klasa";
 import { NeroModActionType } from "./guildSchema";
 
 export interface NeroPunishment {
@@ -12,7 +12,7 @@ export interface NeroWarn extends NeroPunishment {
   type: 6;
 }
 
-export interface NeroMemberSchema extends Settings {
+export interface NeroMemberSchema extends Schema {
   warns: {
     active: NeroWarn[];
     archived: NeroWarn[];

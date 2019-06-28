@@ -43,10 +43,7 @@ export default class extends Function {
             modId: mod.id,
             silent
           },
-          catchUp: true,
-          id: `${
-            user instanceof User || user instanceof GuildMember ? user.id : user
-          }-${guild.id}`
+          catchUp: true
         });
 
         return this.client.emit("modlog", {

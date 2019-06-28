@@ -112,6 +112,24 @@ export default class extends Language {
       COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
         `\\🧨 **|** \`#${oldCh.name}\` has been pruned ||${user}||`,
 
+      // MUTE
+      COMMAND_MUTE_DESCRIPTION:
+        "Mutes a member permanently or for a certain amount of time",
+      COMMAND_MUTE_DONE: (user, reason, duration) =>
+        `\\🤐 **|** \`${user.user.tag}\` has been muted${
+          duration ? "" : " permanently"
+        }${reason ? ` for ${reason}` : ""}${
+          duration ? ` and will be unmuted in ${duration}` : ""
+        }`,
+
+      // UNMUTE
+      RESOLVER_MUTEDMEMBER_INVALID:
+        "You must insert a valid muted member ID or mention",
+
+      COMMAND_UNMUTE_DESCRIPTION: "Unmutes a member",
+      COMMAND_UNMUTE_DONE: user =>
+        `\\🔊 **|** \`${user.user.tag}\` has been unmuted`,
+
       // ROLES
       RESOLVER_IMPROVEDROLE_INVALID:
         "You must insert a valid role ID, mention or name",

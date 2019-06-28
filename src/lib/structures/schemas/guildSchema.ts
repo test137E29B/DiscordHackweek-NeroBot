@@ -1,4 +1,4 @@
-import { KlasaClient, SchemaFolder, Settings } from "klasa";
+import { KlasaClient, SchemaFolder, Schema } from "klasa";
 import { TextChannel, Role } from "discord.js";
 const { defaultGuildSchema } = KlasaClient;
 
@@ -41,7 +41,7 @@ interface PerspectiveToxicity extends NeroModAction {
   threshold: number;
 }
 
-export interface NeroGuildSchema extends Settings {
+export interface NeroGuildSchema extends Schema {
   automod: {
     enabled: boolean;
     perspective: {
@@ -66,6 +66,11 @@ export interface NeroGuildSchema extends Settings {
       action: NeroModAction;
     };
   };
+  warns: {
+    enabled: boolean;
+    actions: NeroModAction[];
+  };
+  toUnmute: string[];
   roles: {
     staff: {
       mute: Role;
@@ -81,7 +86,8 @@ export interface NeroGuildSchema extends Settings {
   };
 }
 
-export const schema = defaultGuildSchema
+// @ts-ignore
+export const schema: NeroGuildSchema = defaultGuildSchema
   .add(
     "automod",
     (folder): SchemaFolder =>
@@ -131,6 +137,15 @@ export const schema = defaultGuildSchema
               })
         )
   )
+
+  .add(
+    "warns",
+    (folder): SchemaFolder =>
+      folder
+        .add("enabled", "boolean", { default: false })
+        .add("actions", "any", { array: true })
+  )
+  .add("toUnmute", "user", { array: true })
 
   .add(
     "roles",

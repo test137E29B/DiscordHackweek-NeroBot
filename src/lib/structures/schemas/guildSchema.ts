@@ -24,7 +24,7 @@ export enum NeroModActionType {
   PRUNECHANNEL
 }
 
-interface NeroModAction {
+export interface NeroModAction {
   action: NeroModDashboardActionType;
   duration?: Date;
   ignoreStaff: boolean;

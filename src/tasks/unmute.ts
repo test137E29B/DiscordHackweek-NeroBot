@@ -23,7 +23,7 @@ export default class extends Task {
     const userSettings = await this.client.gateways.members.get(
       `${guildId}.${userId}`
     );
-    this.client.console.log(userSettings);
+
     if (!role || !userSettings) {
       await guild.settings.update("toUnmute", userId, { action: "add" });
       return;

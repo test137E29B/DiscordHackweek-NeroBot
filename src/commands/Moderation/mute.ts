@@ -55,10 +55,6 @@ export default class extends Command {
           duration ? msg.args[1] : null
         ])
       )
-      .then(() =>
-        // @ts-ignore
-        this.client.console.log(user.settings.muted)
-      )
       .catch(() => msg.sendLocale("ERR"));
   }
 }

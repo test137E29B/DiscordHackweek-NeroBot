@@ -27,7 +27,7 @@ export default class extends Event {
     await member.settings.sync(true);
     // @ts-ignore
     const sett = (await member.settings) as Settings & NeroMemberSchema;
-    this.client.console.log(sett);
+
     if (sett && sett.get("muted"))
       // @ts-ignore
       this.client.funcs.mute({

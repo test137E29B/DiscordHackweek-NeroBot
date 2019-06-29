@@ -112,6 +112,45 @@ export default class extends Language {
       COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
         `\\🧨 **|** \`#${oldCh.name}\` foi completamente limpo ||${user}||`,
 
+      // MUTE
+      COMMAND_MUTE_DESCRIPTION:
+        "Silencia um membro permanentemente ou temporariamente",
+      COMMAND_MUTE_DONE: (user, reason, duration) =>
+        `\\🤐 **|** \`${user.user.tag}\` foi silenciado${
+          duration ? "" : " permanentemente"
+        }${reason ? ` por ${reason}` : ""}${
+          duration ? ` e poderá voltar a falar em ${duration}` : ""
+        }`,
+
+      // UNMUTE
+      RESOLVER_MUTEDMEMBER_INVALID:
+        "Você deve inserir um ID ou menção de um membro silenciado",
+
+      COMMAND_UNMUTE_DESCRIPTION: "Remove o status de silenciado de um membro",
+      COMMAND_UNMUTE_DONE: user =>
+        `\\🔊 **|** \`${user.user.tag}\` consegue falar novamente`,
+
+      // WARN
+      COMMAND_WARN_DESCRIPTION: "Avisa um membro sobre algo",
+      COMMAND_WARN_DONE: (user, reason) =>
+        `\\❗ **|** \`${user.user.tag}\` recebeu um aviso${
+          reason ? ` de ${reason}` : ``
+        }`,
+
+      // LISTWARNS
+      COMMAND_LISTWARN_DESCRIPTION:
+        "Mostra a lista de avisos que um membro recebeu",
+
+      // DELWARN
+      RESOLVER_INVALID_WARNPOSITION:
+        "Você deve inserir um ID (número) de um aviso válido",
+
+      COMMAND_DELWARN_DESCRIPTION: "Remove um aviso de um membro",
+      COMMAND_DELWARN_DONE: (user, position, reason) =>
+        `\\❗ **|** O aviso número ${position} de \`${
+          user.user.tag
+        }\` foi removido${reason ? ` por ${reason}` : ``}`,
+
       // ROLES
       RESOLVER_IMPROVEDROLE_INVALID:
         "Você deve inserir um ID, menção ou nome de um cargo",
@@ -127,7 +166,9 @@ export default class extends Language {
         `\\🎭 **|** O cargo de ${roleType} atual é \`${role.name} (${role.id})\``,
       ROLES_NOT_DEFINED: roleType =>
         `\\❌ **|** Nenhum cargo de ${roleType} foi configurado`,
-
+      ROLES_REQUIRED: (roleType, setupCommand) =>
+        `\\❌ **|** Para executar este comando o cargo de ${roleType} tem que estar configurado, para fazer isso use o comando ${setupCommand ||
+          roleType}`,
       // MUTEDROLE
       COMMAND_MUTEDROLE_EXTENDED:
         "Opções: --manual (não cria as permissões automaticamente)"

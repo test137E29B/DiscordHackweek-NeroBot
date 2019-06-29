@@ -22,33 +22,55 @@ export default class extends Command {
       usage: "<User:tempbanneduser> [Reason:...string]"
     });
 
-    this.createCustomResolver("tempbanneduser", (arg, possible, msg) => {
+    this.createCustomResolver("tempbanneduser", async (arg, possible, msg) => {
+      if (!arg) throw msg.language.get("RESOLVER_TEMPBANNEDUSER_INVALID");
+
+      const tasks = this.client.schedule.tasks;
+      const bans = await msg.guild.fetchBans();
+      let ban;
+
       if (!constants.MENTION_REGEX.userOrMember.test(arg))
-        throw msg.language.get("RESOLVER_TEMPBANNEDUSER_INVALID");
+        ban = bans.find(ban => ban.user.username === arg);
+      else {
+        const id = arg.replace(/[!@<>]/g, "");
+        ban = bans.find(ban => ban.user.id === id);
+      }
 
-      const id = arg.replace(/[!@<>]/g, "");
-      const schedule = this.client.schedule.get(`${id}-${msg.guild.id}`);
+      if (!ban) throw msg.language.get("RESOLVER_TEMPBANNEDUSER_INVALID");
 
-      if (!schedule) throw msg.language.get("RESOLVER_TEMPBANNEDUSER_INVALID");
-      return schedule.id;
+      const exists = !!tasks.filter(
+        task =>
+          task.taskName === "unban" &&
+          task.data.userId === ban.user.id &&
+          task.data.guildId === msg.guild.id
+      );
+
+      if (!exists) throw msg.language.get("RESOLVER_TEMPBANNEDUSER_INVALID");
+
+      return ban.user;
     });
   }
 
   async run(msg: KlasaMessage, args) {
-    const [schedule, reason] = args;
-    const user = await msg.guild
-      .fetchBans()
-      .then(bans => bans.find(ban => ban.user.id === schedule.split("-")[0]))
-      .then(ban => (ban ? ban.user : { tag: "Not Found" }));
+    const { flags } = msg;
+    const [user, reason] = args;
 
-    return this.client.schedule
-      .delete(schedule)
+    const silent: boolean = "silent" in flags || "s" in flags;
+
+    // @ts-ignore
+    return this.client.funcs
+      .clearTasks({
+        user,
+        guild: msg.guild,
+        taskName: "unban"
+      })
       .then(() => {
         this.client.emit("modlog", {
-          user: user,
+          user,
           guild: msg.guild,
-          mod: msg.author.tag,
+          mod: msg.author,
           reason,
+          silent,
           type: "CANCELUNBAN"
         });
         return msg.sendLocale("COMMAND_CANCELUNBAN_DONE", [user, reason]);

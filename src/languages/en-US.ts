@@ -25,11 +25,12 @@ export default class extends Language {
 
       // BAN
       COMMAND_BAN_DESCRIPTION: "Bans a user",
-      COMMAND_BAN_EXTENDED: "Flags: --7d --1d",
+      COMMAND_BAN_EXTENDED:
+        "Flags: --7d --1d (deletes their messages) --silent (doesn't log)",
       COMMAND_BAN_NOT: user =>
         `\\❌ **|** Unfortunately, I'm not able to ban \`${user.user.tag}\``,
-      COMMAND_BAN_DONE: (user, reason, days) =>
-        `\\🔨 **|** \`${user.user.tag}\` was hit with the ban hammer${
+      COMMAND_BAN_DONE: (userOrId, reason, days) =>
+        `\\🔨 **|** \`${userOrId}\` was hit with the ban hammer${
           reason ? ` for \`${reason}\`` : ``
         }${
           days
@@ -61,10 +62,8 @@ export default class extends Language {
         "Flags: --7d --1d\nThe unban can be cancelled at anytime by using the cancelUnban command",
       COMMAND_TEMPBAN_NOT: user =>
         `\\❌ **|** Unfortunately, I'm not able to softban \`${user.user.tag}\``,
-      COMMAND_TEMPBAN_DONE: (user, reason, days, duration) =>
-        `\\🔨 **|** \`${
-          user.user.tag
-        }\` was hit with the ban hammer (temporarily)${
+      COMMAND_TEMPBAN_DONE: (userOrId, reason, days, duration) =>
+        `\\🔨 **|** \`${userOrId}\` was hit with the ban hammer (temporarily)${
           reason ? ` for \`${reason}\`` : ``
         }${
           days
@@ -113,6 +112,45 @@ export default class extends Language {
       COMMAND_PRUNECHANNEL_DONE: (user, oldCh, newCh) =>
         `\\🧨 **|** \`#${oldCh.name}\` has been pruned ||${user}||`,
 
+      // MUTE
+      COMMAND_MUTE_DESCRIPTION:
+        "Mutes a member permanently or for a certain amount of time",
+      COMMAND_MUTE_DONE: (user, reason, duration) =>
+        `\\🤐 **|** \`${user.user.tag}\` has been muted${
+          duration ? "" : " permanently"
+        }${reason ? ` for ${reason}` : ""}${
+          duration ? ` and will be unmuted in ${duration}` : ""
+        }`,
+
+      // UNMUTE
+      RESOLVER_MUTEDMEMBER_INVALID:
+        "You must insert a valid muted member ID or mention",
+
+      COMMAND_UNMUTE_DESCRIPTION: "Unmutes a member",
+      COMMAND_UNMUTE_DONE: user =>
+        `\\🔊 **|** \`${user.user.tag}\` has been unmuted`,
+
+      // WARN
+      COMMAND_WARN_DESCRIPTION: "Warns a member for something",
+      COMMAND_WARN_DONE: (user, reason) =>
+        `\\❗ **|** \`${user.user.tag}\` has been warned${
+          reason ? ` for ${reason}` : ``
+        }`,
+
+      // LISTWARNS
+      COMMAND_LISTWARN_DESCRIPTION: "Lists the warns a member has received",
+
+      // DELWARN
+      RESOLVER_INVALID_WARNPOSITION: "You must insert a valid warn id (number)",
+
+      COMMAND_DELWARN_DESCRIPTION: "Removes a warning from a member",
+      COMMAND_DELWARN_DONE: (user, position, reason) =>
+        `\\❗ **|** \`${
+          user.user.tag
+        }\`'s warning \#${position} has been removed${
+          reason ? ` for ${reason}` : ``
+        }`,
+
       // ROLES
       RESOLVER_IMPROVEDROLE_INVALID:
         "You must insert a valid role ID, mention or name",
@@ -128,6 +166,9 @@ export default class extends Language {
         `\\🎭 **|** The current ${roleType} role is \`${role.name} (${role.id})\``,
       ROLES_NOT_DEFINED: roleType =>
         `\\❌ **|** No ${roleType} role has been setup`,
+      ROLES_REQUIRED: (roleType, setupCommand) =>
+        `\\❌ **|** The ${roleType} role must be setup in order to use this command, to set it up run ${setupCommand ||
+          roleType}`,
 
       // MUTEDROLE
       COMMAND_MUTEDROLE_EXTENDED:

@@ -21,33 +21,41 @@ export default class extends Command {
   }
 
   public async run(msg: KlasaMessage, args: [TextChannel?]): Promise<any> {
+    const { flags } = msg;
     const [channel] = args;
-    let oldCh: TextChannel;
 
     // @ts-ignore
-    if (!channel) oldCh = msg.channel;
-    else oldCh = channel;
+    let oldCh: TextChannel = channel || msg.channel;
 
     if (!oldCh.deletable)
       return msg.sendLocale("COMMAND_PRUNECHANNEL_NOT", [oldCh]);
 
     const reason = `${msg.author.tag} - PRUNE`;
+    const silent: boolean = "silent" in flags || "s" in flags;
 
     // @ts-ignore
     const newCh: TextChannel = await oldCh.clone({ reason });
 
     return oldCh
       .delete(reason)
-      .then(() =>
-        newCh.send(
+      .then(async messages => {
+        await this.client.emit("modlog", {
+          channels: [oldCh, newCh],
+          guild: msg.guild,
+          mod: msg.author,
+          silent,
+          type: "PRUNECHANNEL"
+        });
+
+        return newCh.send(
           msg.language.get(
             "COMMAND_PRUNECHANNEL_DONE",
             msg.author,
             oldCh,
             newCh
           )
-        )
-      )
+        );
+      })
       .catch(
         () =>
           msg.sendLocale("ERR") ||

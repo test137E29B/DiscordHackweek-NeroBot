@@ -1,4 +1,4 @@
-import { PermissionLevels, KlasaMessage } from "klasa";
+import { PermissionLevels, KlasaMessage, Settings } from "klasa";
 import { Role } from "discord.js";
 import { NeroGuildSchema } from "./schemas/guildSchema";
 
@@ -11,7 +11,7 @@ export default new PermissionLevels()
     1,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
-      const settings = guild.settings as NeroGuildSchema;
+      const settings = guild.settings as Settings & NeroGuildSchema;
 
       return member.roles.some(
         (role: Role): boolean =>
@@ -28,7 +28,7 @@ export default new PermissionLevels()
     2,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
-      const settings = guild.settings as NeroGuildSchema;
+      const settings = guild.settings as Settings & NeroGuildSchema;
 
       return member.roles.some(
         (role: Role): boolean =>
@@ -45,7 +45,7 @@ export default new PermissionLevels()
     3,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
-      const settings = guild.settings as NeroGuildSchema;
+      const settings = guild.settings as Settings & NeroGuildSchema;
 
       return (
         member.roles.some(
@@ -65,7 +65,7 @@ export default new PermissionLevels()
     4,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
-      const settings = guild.settings as NeroGuildSchema;
+      const settings = guild.settings as Settings & NeroGuildSchema;
 
       return (
         member.roles.some(
@@ -84,7 +84,7 @@ export default new PermissionLevels()
     5,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
-      const settings = guild.settings as NeroGuildSchema;
+      const settings = guild.settings as Settings & NeroGuildSchema;
 
       return (
         member.roles.some(
@@ -104,7 +104,7 @@ export default new PermissionLevels()
     6,
     ({ guild, member }: KlasaMessage): boolean => {
       if (!guild) return false;
-      const settings = guild.settings as NeroGuildSchema;
+      const settings = guild.settings as Settings & NeroGuildSchema;
 
       return (
         member.roles.some(

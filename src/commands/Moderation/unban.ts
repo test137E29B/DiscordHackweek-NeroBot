@@ -23,13 +23,17 @@ export default class extends Command {
     });
 
     this.createCustomResolver("banneduser", async (arg, possible, msg) => {
-      if (!constants.MENTION_REGEX.userOrMember.test(arg))
-        throw msg.language.get("RESOLVER_BANNEDUSER_INVALID");
+      if (!arg) throw msg.language.get("RESOLVER_BANNEDUSER_INVALID");
 
-      const id = arg.replace(/[!@<>]/g, "");
-      const ban = await msg.guild
-        .fetchBans()
-        .then(bans => bans.find(ban => ban.user.id === id));
+      const bans = await msg.guild.fetchBans();
+      let ban;
+
+      if (!constants.MENTION_REGEX.userOrMember.test(arg))
+        ban = bans.find(ban => ban.user.username === arg);
+      else {
+        const id = arg.replace(/[!@<>]/g, "");
+        ban = bans.find(ban => ban.user.id === id);
+      }
 
       if (!ban) throw msg.language.get("RESOLVER_BANNEDUSER_INVALID");
       return ban.user;
@@ -37,20 +41,19 @@ export default class extends Command {
   }
 
   async run(msg: KlasaMessage, args) {
+    const { flags } = msg;
     const [user, reason] = args;
 
-    return this.client.tasks
-      .get("unban")
-      .run({
-        userId: user.id,
-        guildId: msg.guild.id,
-        mod: msg.author.tag,
+    const silent: boolean = "silent" in flags || "s" in flags;
+
+    // @ts-ignore
+    return this.client.funcs
+      .unban({
+        user,
+        guild: msg.guild,
+        mod: msg.author,
         reason,
-        type: "UNBAN"
-      })
-      .then(() => {
-        const schedule = this.client.schedule.get(`${user.id}-${msg.guild.id}`);
-        if (schedule) this.client.schedule.delete(`${user.id}-${msg.guild.id}`);
+        silent
       })
       .then(() => msg.sendLocale("COMMAND_UNBAN_DONE", [user, reason]))
       .catch(() => msg.sendLocale("ERR"));

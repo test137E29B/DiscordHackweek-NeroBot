@@ -1,23 +1,32 @@
 {
-  "name": "klasa-ts",
+  "name": "nerobot",
   "version": "1.0.0",
-  "description": "A barebones TypeScript Klasa Bot Template!",
+  "description": "A moderation bot for Discord's Hack Week",
   "main": "dist/src/main.js",
-  "repository": "https://github.com/kyranet/klasa-ts-template",
-  "author": "Antonio Román <kyradiscord@gmail.com>",
-  "license": "UNLICENSE",
+  "repository": "https://github.com/test137E29B/DiscordHackweek-NeroBot",
+  "contributors": [
+    "João Pedro (https://jpsl.dev/)",
+    "Jason"
+  ],
+  "license": "MIT",
   "private": true,
   "scripts": {
     "lint": "eslint --ext ts src --fix",
     "test:lint": "eslint --ext ts src",
-    "build": "tsc -p .",
+    "build": "tsc -p . --skipLibCheck",
     "watch": "tsc -p . -w",
     "start": "node dist/src/main.js",
-    "dev": "rm -rf dist && yarn run build && yarn run start"
+    "dev": "rm -rf dist && yarn run build && yarn run start",
+    "fix-deps": "yarn add discordjs/discord.js dirigeants/klasa"
   },
   "dependencies": {
+    "@kcp/functions": "^1.0.0",
     "discord.js": "discordjs/discord.js",
-    "klasa": "dirigeants/klasa"
+    "klasa": "dirigeants/klasa",
+    "klasa-dashboard-hooks": "dirigeants/klasa-dashboard-hooks",
+    "klasa-member-gateway": "dirigeants/klasa-member-gateway",
+    "mongodb": "^3.2.7",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@types/node": "^12.0.7",
@@ -25,6 +34,10 @@
     "@typescript-eslint/parser": "^1.9.0",
     "eslint": "^5.16.0",
     "eslint-config-klasa": "dirigeants/klasa-lint",
+    "eslint-config-prettier": "^5.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.1"
   }
 }

@@ -1,24 +1,38 @@
-import { KlasaClient } from 'klasa';
-import { NeroClientOptions } from './lib/structures/neroClient.schema';
-import permissionLevels from './lib/structures/PermissionLevels';
-import { config, token } from '../config';
+import { KlasaClient } from "klasa";
+
+import { NeroClientOptions } from "./lib/structures/neroClient.schema";
+import permissionLevels from "./lib/structures/PermissionLevels";
+
+// Schemas
+import { schema as guildSchema } from "./lib/structures/schemas/guildSchema";
+import { schema as memberSchema } from "./lib/structures/schemas/memberSchema";
+
+// Config
+import { config, token } from "../config";
+
+// Plugins
+import { Client as DashboardClient } from "klasa-dashboard-hooks";
+import { Client as FunctionsClient } from "@kcp/functions";
+import { Client as MemberGatewayClient } from "klasa-member-gateway";
 
 class NeroClient extends KlasaClient {
+  public owners: string[];
 
-	public owners: string[];
+  public constructor(options: NeroClientOptions) {
+    options.gateways.guilds.schema = guildSchema;
+    options.gateways.members.schema = memberSchema;
 
-	public constructor(options: NeroClientOptions) {
-		super({
-			...options,
-			permissionLevels
-		});
+    super({
+      ...options,
+      permissionLevels
+    });
 
-		this.owners = options.ownerIDs;
-		// Add any properties to your Klasa Client
-	}
-
-	// Add any methods to your Klasa Client
-
+    this.owners = options.ownerIDs;
+  }
 }
+
+NeroClient.use(DashboardClient);
+NeroClient.use(FunctionsClient);
+NeroClient.use(MemberGatewayClient);
 
 new NeroClient(config).login(token);

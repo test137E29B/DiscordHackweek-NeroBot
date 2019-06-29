@@ -37,7 +37,7 @@ export interface NeroModAction {
   silent: boolean;
 }
 
-export interface PerspectiveToxicity extends NeroModAction {
+export interface NeroThresholdModAction extends NeroModAction {
   threshold: number;
 }
 
@@ -47,7 +47,7 @@ export interface NeroGuildSchema extends Schema {
     perspective: {
       enabled: boolean;
       channels: TextChannel[];
-      toxicity: PerspectiveToxicity[];
+      toxicity: NeroThresholdModAction[];
     };
     words: {
       enabled: boolean;
@@ -68,7 +68,7 @@ export interface NeroGuildSchema extends Schema {
   };
   warns: {
     enabled: boolean;
-    actions: NeroModAction[];
+    actions: NeroThresholdModAction[];
   };
   toUnmute: string[];
   roles: {

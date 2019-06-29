@@ -1,14 +1,17 @@
 import { Function } from "@kcp/functions";
 import { User, Guild } from "discord.js";
 import { KlasaMember } from "klasa-member-gateway";
+import { SettingsUpdateOptions } from "klasa";
 export default class extends Function {
   async run({
+    position,
     user,
     guild,
     mod,
     reason,
     silent
   }: {
+    position: number;
     user: KlasaMember;
     guild: Guild;
     mod?: User;
@@ -18,17 +21,14 @@ export default class extends Function {
     // @ts-ignore
     const settings = await user.settings.sync();
 
-    const now = Date.now();
-
     return settings
       .update(
         "warns.active",
-        mod
-          ? { modID: mod.id, reason, timestamp: now }
-          : { reason, timestamp: now },
-        { action: "add" }
+        [...settings.get("warns.active").slice(0, position - 1)],
+        {
+          action: "overwrite"
+        }
       )
-      .then(() => this.client.emit("guildMemberWarnAdd", user))
       .then(() =>
         this.client.emit("modlog", {
           user,

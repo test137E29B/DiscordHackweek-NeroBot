@@ -7,7 +7,7 @@ import {
 } from "klasa";
 import {
   NeroGuildSchema,
-  PerspectiveToxicity
+  NeroThresholdModAction
 } from "../lib/structures/schemas/guildSchema";
 import fetch from "node-fetch";
 import { perspective } from "../../config";
@@ -40,7 +40,7 @@ export default class extends Monitor {
       toxicity
     }: {
       channels: string[];
-      toxicity: PerspectiveToxicity[];
+      toxicity: NeroThresholdModAction[];
     } = config.get("automod.perspective");
 
     if (!channels.includes(channel.id) || !toxicity || !toxicity.length) return;

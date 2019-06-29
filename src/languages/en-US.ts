@@ -130,6 +130,27 @@ export default class extends Language {
       COMMAND_UNMUTE_DONE: user =>
         `\\🔊 **|** \`${user.user.tag}\` has been unmuted`,
 
+      // WARN
+      COMMAND_WARN_DESCRIPTION: "Warns a member for something",
+      COMMAND_WARN_DONE: (user, reason) =>
+        `\\❗ **|** \`${user.user.tag}\` has been warned${
+          reason ? ` for ${reason}` : ``
+        }`,
+
+      // LISTWARNS
+      COMMAND_LISTWARN_DESCRIPTION: "Lists the warns a member has received",
+
+      // DELWARN
+      RESOLVER_INVALID_WARNPOSITION: "You must insert a valid warn id (number)",
+
+      COMMAND_DELWARN_DESCRIPTION: "Removes a warning from a member",
+      COMMAND_DELWARN_DONE: (user, position, reason) =>
+        `\\❗ **|** \`${
+          user.user.tag
+        }\`'s warning \#${position} has been removed${
+          reason ? ` for ${reason}` : ``
+        }`,
+
       // ROLES
       RESOLVER_IMPROVEDROLE_INVALID:
         "You must insert a valid role ID, mention or name",

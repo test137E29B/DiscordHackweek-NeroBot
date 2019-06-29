@@ -130,6 +130,27 @@ export default class extends Language {
       COMMAND_UNMUTE_DONE: user =>
         `\\🔊 **|** \`${user.user.tag}\` consegue falar novamente`,
 
+      // WARN
+      COMMAND_WARN_DESCRIPTION: "Avisa um membro sobre algo",
+      COMMAND_WARN_DONE: (user, reason) =>
+        `\\❗ **|** \`${user.user.tag}\` recebeu um aviso${
+          reason ? ` de ${reason}` : ``
+        }`,
+
+      // LISTWARNS
+      COMMAND_LISTWARN_DESCRIPTION:
+        "Mostra a lista de avisos que um membro recebeu",
+
+      // DELWARN
+      RESOLVER_INVALID_WARNPOSITION:
+        "Você deve inserir um ID (número) de um aviso válido",
+
+      COMMAND_DELWARN_DESCRIPTION: "Remove um aviso de um membro",
+      COMMAND_DELWARN_DONE: (user, position, reason) =>
+        `\\❗ **|** O aviso número ${position} de \`${
+          user.user.tag
+        }\` foi removido${reason ? ` por ${reason}` : ``}`,
+
       // ROLES
       RESOLVER_IMPROVEDROLE_INVALID:
         "Você deve inserir um ID, menção ou nome de um cargo",

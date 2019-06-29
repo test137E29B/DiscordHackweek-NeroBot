@@ -41,7 +41,7 @@ export default class extends Function {
       })
         .catch(() => false)
         .finally(val => {
-          if (action.action !== 4 && msg.deletable) msg.delete();
+          if (action.action !== 4 && msg && msg.deletable) msg.delete();
           return val;
         })
     );

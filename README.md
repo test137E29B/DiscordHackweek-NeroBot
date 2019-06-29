@@ -20,6 +20,8 @@ Built with TypeScript and Klasa for Discord Hackweek Bot's Moderation Category
   - Tempban
   - Softban
 - Unban
+- Mute 
+- Unmute
 - Prune
   - Messages
   - Channel

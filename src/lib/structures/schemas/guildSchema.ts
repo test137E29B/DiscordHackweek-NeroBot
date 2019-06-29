@@ -1,5 +1,6 @@
 import { KlasaClient, SchemaFolder, Schema } from "klasa";
 import { TextChannel, Role } from "discord.js";
+import { Schema } from "klasa";
 const { defaultGuildSchema } = KlasaClient;
 
 enum NeroModDashboardActionType {

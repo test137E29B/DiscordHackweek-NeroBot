@@ -1,6 +1,5 @@
 import { KlasaClient, SchemaFolder, Schema } from "klasa";
 import { TextChannel, Role } from "discord.js";
-import { Schema } from "klasa";
 const { defaultGuildSchema } = KlasaClient;
 
 enum NeroModDashboardActionType {
@@ -87,6 +86,51 @@ export interface NeroGuildSchema extends Schema {
   };
 }
 
+export interface NeroGuildSettingsOnly {
+  automod: {
+    enabled: boolean;
+    perspective: {
+      enabled: boolean;
+      channels: TextChannel[];
+      toxicity: NeroThresholdModAction[];
+    };
+    words: {
+      enabled: boolean;
+      channels: TextChannel[];
+      list: string[];
+      action: NeroModAction;
+    };
+    invite: {
+      enabled: boolean;
+      channels: TextChannel[];
+      action: NeroModAction;
+    };
+    repetition: {
+      enabled: boolean;
+      channels: TextChannel[];
+      action: NeroModAction;
+    };
+  };
+  warns: {
+    enabled: boolean;
+    actions: NeroThresholdModAction[];
+  };
+  toUnmute: string[];
+  roles: {
+    staff: {
+      mute: Role;
+      warn: Role;
+      kick: Role;
+      ban: Role;
+      manager: Role;
+      admin: Role;
+    };
+    punishments: {
+      muted: Role;
+    };
+  };
+}
+
 // @ts-ignore
 export const schema: NeroGuildSchema = defaultGuildSchema
   .add(
@@ -115,7 +159,10 @@ export const schema: NeroGuildSchema = defaultGuildSchema
               .add("channels", "textchannel", { array: true })
               .add("list", "string", { array: true })
               .add("action", "any", {
-                default: { action: "kick", reason: "Saying a blacklisted word" },
+                default: {
+                  action: "kick",
+                  reason: "Saying a blacklisted word"
+                },
                 configurable: false
               })
         )

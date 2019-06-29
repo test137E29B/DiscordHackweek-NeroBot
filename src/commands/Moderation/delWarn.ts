@@ -1,6 +1,5 @@
 import { Command, CommandStore, KlasaMessage, KlasaClient } from "klasa";
 import { GuildMember } from "discord.js";
-import { KlasaMember } from "klasa-member-gateway";
 
 export default class extends Command {
   public constructor(

@@ -1,7 +1,6 @@
 import { Function } from "@kcp/functions";
 import { User, Guild } from "discord.js";
 import { KlasaMember } from "klasa-member-gateway";
-import { SettingsUpdateOptions } from "klasa";
 export default class extends Function {
   async run({
     position,

@@ -13,7 +13,7 @@
   "scripts": {
     "lint": "eslint --ext ts src --fix",
     "test:lint": "eslint --ext ts src",
-    "build": "tsc -p .",
+    "build": "tsc -p . --skipLibCheck",
     "watch": "tsc -p . -w",
     "start": "node dist/src/main.js",
     "dev": "rm -rf dist && yarn run build && yarn run start",

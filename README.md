@@ -9,7 +9,7 @@ Built with TypeScript and Klasa for Discord Hackweek Bot's Moderation Category
 - [jpsl00#0001](https://github.com/jpsl00)
 
 ## Features
-- [Dashboard](https://nero.aquilamc.net/)
+- [Dashboard](https://nero.aquilamc.net/) and configuration command
 - Automod
   - Toxicity Analysis
   - Blacklisted Words

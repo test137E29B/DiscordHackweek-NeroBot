@@ -26,7 +26,15 @@ export const schema: NeroMemberSchema = new Schema()
     "warns",
     (folder): SchemaFolder =>
       folder
-        .add("active", "any", { array: true })
-        .add("archived", "any", { array: true })
+        .add("active", "any", {
+          array: true,
+          configurable: false
+        })
+        .add("archived", "any", {
+          array: true,
+          configurable: false
+        })
   )
-  .add("muted", "boolean");
+  .add("muted", "boolean", {
+    configurable: false
+  });

@@ -101,7 +101,10 @@ export const schema: NeroGuildSchema = defaultGuildSchema
             subfolder
               .add("enabled", "boolean", { default: false })
               .add("channels", "textchannel", { array: true })
-              .add("toxicity", "any", { array: true })
+              .add("toxicity", "any", {
+                array: true,
+                configurable: false
+              })
         )
 
         .add(
@@ -112,7 +115,8 @@ export const schema: NeroGuildSchema = defaultGuildSchema
               .add("channels", "textchannel", { array: true })
               .add("list", "string", { array: true })
               .add("action", "any", {
-                default: { action: "kick", reason: "Saying a blacklisted word" }
+                default: { action: "kick", reason: "Saying a blacklisted word" },
+                configurable: false
               })
         )
 
@@ -123,7 +127,8 @@ export const schema: NeroGuildSchema = defaultGuildSchema
               .add("enabled", "boolean", { default: false })
               .add("channels", "textchannel", { array: true })
               .add("action", "any", {
-                default: { action: "kick", reason: "Sending invites" }
+                default: { action: "kick", reason: "Sending invites" },
+                configurable: false
               })
         )
 
@@ -134,7 +139,8 @@ export const schema: NeroGuildSchema = defaultGuildSchema
               .add("enabled", "boolean", { default: false })
               .add("channels", "textchannel", { array: true })
               .add("action", "any", {
-                default: { action: "kick", reason: "Don't repeat messages!" }
+                default: { action: "kick", reason: "Don't repeat messages!" },
+                configurable: false
               })
         )
   )
@@ -144,9 +150,15 @@ export const schema: NeroGuildSchema = defaultGuildSchema
     (folder): SchemaFolder =>
       folder
         .add("enabled", "boolean", { default: false })
-        .add("actions", "any", { array: true })
+        .add("actions", "any", {
+          array: true,
+          configurable: false
+        })
   )
-  .add("toUnmute", "user", { array: true })
+  .add("toUnmute", "user", {
+    array: true,
+    configurable: false
+  })
 
   .add(
     "roles",

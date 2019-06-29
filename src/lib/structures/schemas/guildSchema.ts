@@ -1,5 +1,6 @@
-import { KlasaClient, SchemaFolder, Settings } from "klasa";
+import { KlasaClient, SchemaFolder } from "klasa";
 import { TextChannel, Role } from "discord.js";
+import { Schema } from "klasa";
 const { defaultGuildSchema } = KlasaClient;
 
 enum NeroModActionType {
@@ -24,7 +25,7 @@ interface PerspectiveToxicity {
   days?: string;
 }
 
-export interface NeroGuildSchema extends Settings {
+export interface NeroGuildSchema extends Schema {
   automod: {
     enabled: boolean;
     perspective: {
@@ -49,6 +50,11 @@ export interface NeroGuildSchema extends Settings {
       action: NeroModAction;
     };
   };
+  warns: {
+    enabled: boolean;
+    actions: NeroModAction[];
+  };
+  toUnmute: string[];
   roles: {
     staff: {
       mute: Role;
@@ -59,7 +65,51 @@ export interface NeroGuildSchema extends Settings {
       admin: Role;
     };
     punishments: {
+      muted: Role;
+    };
+  };
+}
+export interface NeroGuildSettingsOnly {
+  automod: {
+    enabled: boolean;
+    perspective: {
+      enabled: boolean;
+      channels: TextChannel[];
+      toxicity: PerspectiveToxicity[];
+    };
+    words: {
+      enabled: boolean;
+      channels: TextChannel[];
+      list: string[];
+      action: NeroModAction;
+    };
+    invite: {
+      enabled: boolean;
+      channels: TextChannel[];
+      action: NeroModAction;
+    };
+    repetition: {
+      enabled: boolean;
+      channels: TextChannel[];
+      action: NeroModAction;
+    };
+  };
+  warns: {
+    enabled: boolean;
+    actions: NeroModAction[];
+  };
+  toUnmute: string[];
+  roles: {
+    staff: {
       mute: Role;
+      warn: Role;
+      kick: Role;
+      ban: Role;
+      manager: Role;
+      admin: Role;
+    };
+    punishments: {
+      muted: Role;
     };
   };
 }

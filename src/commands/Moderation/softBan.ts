@@ -22,33 +22,25 @@ export default class extends Command {
   async run(msg: KlasaMessage, args: [GuildMember, String]) {
     const { flags } = msg;
     const [user, reason] = args;
-    if (user.user.id === this.client.user.id)
+
+    if (user.id === this.client.user.id)
       return msg.send(this.client.languages.get("en-US").get("COMPUTER_MAN"));
     if (!user.bannable) return msg.sendLocale("COMMAND_SOFTBAN_NOT", [user]);
 
     const days: number = "7d" in flags ? 7 : 1;
+    const silent: boolean = "silent" in flags || "s" in flags;
 
-    return user
-      .ban({
-        days,
-        reason: `${msg.author.tag} - SOFTBAN (${days}d)${
-          reason ? ` || ${reason}` : ``
-        }`
+    // @ts-ignore
+    return this.client.funcs
+      .softBan({
+        user,
+        guild: msg.guild,
+        mod: msg.author,
+        reason,
+        delMsgs: days,
+        silent
       })
-      .then(() =>
-        this.client.tasks
-          .get("unban")
-          .run({
-            userId: user.id,
-            guildId: msg.guild.id,
-            mod: msg.author.tag,
-            reason,
-            type: "UNBAN"
-          })
-          .then(() =>
-            msg.sendLocale("COMMAND_SOFTBAN_DONE", [user, reason, days])
-          )
-      )
+      .then(() => msg.sendLocale("COMMAND_SOFTBAN_DONE", [user, reason, days]))
       .catch(() => msg.sendLocale("ERR"));
   }
 }

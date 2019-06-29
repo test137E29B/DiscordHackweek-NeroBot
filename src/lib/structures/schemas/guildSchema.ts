@@ -1,36 +1,54 @@
-import { KlasaClient, SchemaFolder, Settings } from "klasa";
+import { KlasaClient, SchemaFolder, Schema } from "klasa";
 import { TextChannel, Role } from "discord.js";
+import { Schema } from "klasa";
 const { defaultGuildSchema } = KlasaClient;
 
-enum NeroModActionType {
+enum NeroModDashboardActionType {
   BAN,
   SOFTBAN,
   TEMPBAN,
   KICK,
   DELETE,
-  WARN
+  WARN,
+  MUTE
 }
 
-interface NeroModAction {
-  action: NeroModActionType;
-  args: string[];
+export enum NeroModActionType {
+  BAN,
+  SOFTBAN,
+  TEMPBAN,
+  KICK,
+  DELETE,
+  WARN,
+  MUTE,
+  PRUNE,
+  PRUNECHANNEL
+}
+
+export interface NeroModAction {
+  action: NeroModDashboardActionType;
+  duration?: Date;
+  ignoreStaff: boolean;
   reason?: string;
+  feedback?: {
+    enabled: boolean;
+    text: string;
+  };
+  delMsgs?: 7 | 1 | 0;
+  silent: boolean;
 }
 
-interface PerspectiveToxicity {
+export interface NeroThresholdModAction extends NeroModAction {
   threshold: number;
-  action: NeroModAction;
-  reason?: string;
-  days?: string;
 }
 
-export interface NeroGuildSchema extends Settings {
+export interface NeroGuildSchema extends Schema {
   automod: {
     enabled: boolean;
     perspective: {
       enabled: boolean;
       channels: TextChannel[];
-      toxicity: PerspectiveToxicity[];
+      toxicity: NeroThresholdModAction[];
     };
     words: {
       enabled: boolean;
@@ -49,16 +67,28 @@ export interface NeroGuildSchema extends Settings {
       action: NeroModAction;
     };
   };
+  warns: {
+    enabled: boolean;
+    actions: NeroThresholdModAction[];
+  };
+  toUnmute: string[];
   roles: {
-    warn: Role;
-    kick: Role;
-    ban: Role;
-    manager: Role;
-    admin: Role;
+    staff: {
+      mute: Role;
+      warn: Role;
+      kick: Role;
+      ban: Role;
+      manager: Role;
+      admin: Role;
+    };
+    punishments: {
+      muted: Role;
+    };
   };
 }
 
-export const schema = defaultGuildSchema
+// @ts-ignore
+export const schema: NeroGuildSchema = defaultGuildSchema
   .add(
     "automod",
     (folder): SchemaFolder =>
@@ -110,12 +140,31 @@ export const schema = defaultGuildSchema
   )
 
   .add(
+    "warns",
+    (folder): SchemaFolder =>
+      folder
+        .add("enabled", "boolean", { default: false })
+        .add("actions", "any", { array: true })
+  )
+  .add("toUnmute", "user", { array: true })
+
+  .add(
     "roles",
     (folder): SchemaFolder =>
       folder
-        .add("warn", "role")
-        .add("kick", "role")
-        .add("ban", "role")
-        .add("manager", "role")
-        .add("admin", "role")
+        .add(
+          "staff",
+          (subfolder): SchemaFolder =>
+            subfolder
+              .add("mute", "role")
+              .add("warn", "role")
+              .add("kick", "role")
+              .add("ban", "role")
+              .add("manager", "role")
+              .add("admin", "role")
+        )
+        .add(
+          "punishments",
+          (subfolder): SchemaFolder => subfolder.add("muted", "role")
+        )
   );

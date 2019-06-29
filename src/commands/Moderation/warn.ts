@@ -9,36 +9,39 @@ export default class extends Command {
     dir: string
   ) {
     super(client, store, file, dir, {
-      requiredPermissions: ["KICK_MEMBERS", "EMBED_LINKS"],
-      permissionLevel: 3,
-      description: (lang): string | string[] =>
-        lang.get("COMMAND_KICK_DESCRIPTION"),
+      requiredPermissions: ["MANAGE_ROLES", "EMBED_LINKS"],
+      permissionLevel: 2,
+      description: lang => lang.get("COMMAND_WARN_DESCRIPTION"),
       runIn: ["text"],
-      aliases: ["bgone", "outtahere"],
-      usage: "<User:member> [Reason:...string]"
+      aliases: ["w"],
+      usage: "<User:member> <Reason:...string>"
     });
   }
 
-  public async run(msg: KlasaMessage, args: [GuildMember, String]) {
+  public async run(
+    msg: KlasaMessage,
+    args: [GuildMember, String]
+  ): Promise<any> {
     const { flags } = msg;
     const [user, reason] = args;
 
     if (user.id === this.client.user.id)
       return msg.send(this.client.languages.get("en-US").get("COMPUTER_MAN"));
-    if (!user.kickable) return msg.sendLocale("COMMAND_KICK_NOT", [user]);
+    if (!msg.guild.settings.get("warns.enabled"))
+      return msg.sendLocale("WARNS_DISABLED");
 
     const silent: boolean = "silent" in flags || "s" in flags;
 
     // @ts-ignore
     return this.client.funcs
-      .kick({
+      .warn({
         user,
         guild: msg.guild,
         mod: msg.author,
         reason,
         silent
       })
-      .then(() => msg.sendLocale("COMMAND_KICK_DONE", [user, reason]))
+      .then(() => msg.sendLocale("COMMAND_WARN_DONE", [user, reason]))
       .catch(() => msg.sendLocale("ERR"));
   }
 }
